@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tables In HTML</title>
+  </head>
+  <body>
+    <!-- table tag represent s real time table-->
+    <table>
+        <!-- caption tag represents the title of the table here-->
+      <caption>
+        Food Items
+      </caption>
+      <!--Table Header-->
+      <thead>
+        <!-- tr tag represents table row-->
+        <tr>
+            <!--th tag represents table head-->
+          <th>Items</th>
+          <th>Rates</th>
+        </tr>
+      </thead>
+      <!--Table Body-->
+      <tbody>
+        <tr>
+            <!-- td tag represents table data-->
+          <td>Frooti</td>
+          <td>Rs 20</td>
+        </tr>
+        <tr>
+          <td>Samosa</td>
+          <td>Rs 12</td>
+        </tr>
+        <tr>
+          <td>Chips</td>
+          <td>Rs 15</td>
+        </tr>
+        <tr>
+          <td>Lassi</td>
+          <td>Rs 25</td>
+        </tr>
+        <tr>
+          <td>Coke</td>
+          <td>Rs 40</td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+        <thead>
+            <tr>
+                <th rowspan="2">Items</th>
+                <th colspan="2">Rates</th>
+            </tr>
+            <tr>
+                <th>INR</th>
+                <th>USD</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Frooti</td>
+                <td>Rs 20</td>
+                <td>.25</td>
+            </tr>
+            <tr>
+                <td>Samosa</td>
+                <td>Rs 12</td>
+                <td>.15</td>
+            </tr>
+            <tr>
+                <td>Chips</td>
+                <td>Rs 15</td>
+                <td>.18</td>
+            </tr>
+            <tr>
+                <td>Lassi</td>
+                <td>Rs 25</td>
+                <td>.31</td>
+            </tr>
+            <tr>
+                <td>Coke</td>
+                <td>Rs 40</td>
+                <td>.50</td>
+            </tr>
+
+        </tbody>
+    </table>
+  </body>
+</html>

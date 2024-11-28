@@ -1,0 +1,90 @@
+/*
+CSS Animation Properties
+------------------------
+    animation-name
+    animation-duration
+    animation-timing-function
+    animation-delay
+    animation-iteration-count
+    animation-direction
+
+Animation Shorthand
+-------------------
+    animation: animationName animationDuration animationTimingFunction animationDelay animationIterationCount animationDirection;
+    example=> animation: fontAnimation 2s linear 3s infinte normal;
+*/
+.box {
+    width: 300px;
+    height: 100px;
+    background-color: aqua;
+    /* animation-name: widthAnimation;
+    animation-duration:3s;
+    animation-timing-function: ease-in;
+    animation-delay: 0;
+    animation-iteration-count: infinite;
+    animation-direction: alternate; */
+    animation: percentAnimate 2s ease-in 0s infinite alternate;
+}
+
+@keyframes fontAnimation {
+    from {
+        font-size: 20px;
+    }
+
+    to {
+        font-size: 40px;
+    }
+}
+
+@keyframes colorAnimation {
+    from {
+        background-color: aqua;
+    }
+
+    to {
+        background-color: blue;
+    }
+}
+
+@keyframes widthAnimation {
+    from {
+        width: 100px;
+    }
+
+    to {
+        width: 800px;
+    }
+}
+
+@keyframes multiAnimate {
+    from {
+        font-size: 20px;
+        background-color: aqua;
+        width: 100px;
+    }
+
+    to {
+        font-size: 40px;
+        background-color: blue;
+        width: 800px;
+        border-radius: 10px;
+    }
+
+}
+
+@keyframes percentAnimate {
+    0% {
+        font-size: 20px;
+        background-color: aqua;
+    }
+
+    50% {
+        font-size: 40px;
+        background-color: blue;
+        width: 800px;
+    }
+
+    100% {
+        border-radius: 50%;
+    }
+}

@@ -1,0 +1,107 @@
+/*
+Grid Model-Grid Lines,Grid Cell, and Grid Track
+===============================================
+1. Grid Template:
+--------------
+    grid-template-rows - to create row in the grid.
+    grid-template-rows: 150px 150px 150px 150px;
+    grid-template-columns- to create column in the grid.
+    grid-template-columns: 150px 150px 150px 150px;
+    ----------------------------------------
+    repeat- is used to divide available space
+    Efficient way-
+    grid-template-rows:repeat(3,1fr);
+    grid-template-columns:repeat(3,1fr);
+    --------------------------------------
+    grid-template-rows:1fr 1fr 1fr;
+    grid-template-columns:1fr 1fr 1fr;
+
+2. Grid Gaps-used to define the gap between the lines
+--------------------------------------------------
+    row-gap
+    column-gap
+    grid-gap: row-gap column-gap
+    
+3. Grid Column - define the item start and end position inside the column.
+----------------------------------------------------------------------
+    grid-column-start: line_number;
+    grid-column-end: line_number;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    ------------------------------
+    grid-column: start_col/end_col
+    grid-column: 1/4;
+    grid-column:start_col/ span number
+    grid-column: 1/ span 3;
+
+4. Grid Row=>define the item start and end position inside the row
+---------------------------------------------------------------
+    grid-row-start: line_number;
+    grid-row-end: line_number;
+    grid-row-start: 1;
+    grid-row-end: 4;
+    ----------------
+    grid-row: start_col/end_col
+    grid-row: 1/4;
+    grid-row:start_col/ span number
+    grid-row: 1/ span 3;
+5. Grid Properties=>
+--------------------
+    Below proproties get applied Horizontally on elements
+    justtify-items - (container)
+    justify-self - (item)
+
+    Below proproties get applied Vertically on elements
+    align-items - (container)
+    align-self - (item)
+
+    place-items - (container)
+    place-self - (item)
+*/
+
+.container {
+    height: 300px;
+    width: 600px;
+    background-color: yellow;
+    display: grid;
+    /* grid-template-rows: 150px 150px 150px 150px;
+    grid-template-columns: 150px 150px 150px 150px; */
+    grid-template-rows:repeat(3,1fr);
+    grid-template-columns:repeat(3,1fr);
+    /* grid-template-rows:1fr 1fr 1fr;
+    grid-template-columns:1fr 1fr 1fr; */
+
+    /* row-gap:10px;
+    column-gap:10px; */
+    /* grid-gap: 10px 20px; */
+    grid-gap: 10px;
+    /* justify-items: center;
+    align-items: center; */
+}
+
+.items {
+    
+    background-color: green;
+    border: 2px solid black;
+    text-align: center;
+}
+#one{
+    /* grid-column-start: 1;
+    grid-column-end: 4; */
+
+    /* grid-column: 1/4; */
+    grid-column: 1/ span 3;
+}
+
+#two{
+    /* grid-row-start: 2;
+    grid-row-end: 4; */
+    /* grid-row: 2/4; */
+    grid-row: 2/ span 2;
+
+}
+
+#four{
+    align-self:self-start;
+    justify-self:center;
+}

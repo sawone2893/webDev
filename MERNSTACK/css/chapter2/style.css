@@ -1,0 +1,124 @@
+/*Universal Selector*/
+*{
+    font-family: 'Courier New';
+}
+
+/*Element Selector*/
+h1,h3{
+    color: #b92b27;
+}
+
+/*ID Selector*/
+#login{
+    background-color: white;
+}
+#signup{
+    background-color: #b92b27;
+    color: white;
+}
+
+/*Class Selector*/
+.upvote{
+    background-color: green;
+    color: aliceblue;
+}
+
+/*Descendent Selector*/
+.post a{
+    color: purple;
+    background-color: yellow;
+}
+nav ul li{
+    color: pink;
+}
+nav ul li a{
+    color: pink;
+}
+
+/*Adjacent Sibling Combinator*/
+p+h3{
+    text-decoration: underline;
+}
+.upvote+button{
+    background-color: cornflowerblue;
+    color: darkblue;
+}
+
+/*Child Combinator*/
+div>input{
+    background-color: darksalmon;
+
+}
+
+/*Attribute Selector*/
+input[type="text"]{
+    color: red;
+}
+input[type="password"]{
+    color: green;
+}
+input[type]{
+    background-color: ghostwhite;
+}
+
+/*Pseudo class*/
+button:hover{
+    color: whilte;
+    background-color: black;
+}
+h3:hover{
+    text-decoration: none;
+}
+
+button:active{
+    background-color: hotpink;
+    color: black;
+}
+p:active{
+    background-color: green;
+    color: crimson;
+}
+input[type="radio"]:checked+label{
+    color: red;
+    font-weight: bold;
+}
+div:nth-of-type(2n){
+    background-color: blanchedalmond;
+}
+
+/*Pseudo Element*/
+h1::first-letter{
+    color: green;
+}
+
+p::first-line{
+    color: purple;
+}
+p::selection{
+    color: limegreen;
+}
+
+/*Selector Specificity: Algo  that calculates the weight that is applied to the given CSS declaration
+Rule1: id>class>element
+Rule2: Specificity Calculation based on below criteria
+_____    _____      _____        ______
+inline    id        class,       element,
+sytle               attribute,   psuedo-element
+                    psuedo-class
+example 
+.myClass:hover{
+
+}
+020
+h1{
+}
+001
+
+Rule3: If specificity is same then cascading property will be considered.
+Rule4: Inline specificity will have the highest priority.
+*/
+
+/*!important*/
+h3{
+    color: aquamarine !important;
+}

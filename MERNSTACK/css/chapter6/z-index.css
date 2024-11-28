@@ -1,0 +1,31 @@
+/*
+Z-Index
+    decide the stack level of elements.
+    Elements which have larger value for z-index will come in the front.
+    Note=> 1. Position property of element should not be static or default.
+           2. By defualt z-index value for element is zero.
+           3. Z-index can be +ve or -ve.
+*/
+
+.box{
+    height: 150px;
+    width: 150px;
+    border: 2px solid black;
+    background-color: pink;
+}
+
+#one{
+    background-color: aquamarine;
+    position: relative;
+    z-index: 1;
+}
+#two{
+    background-color: darksalmon;
+    position: relative;
+    bottom: 50px;
+    z-index: -1;
+}
+
+#three{
+    background-color: red;
+}

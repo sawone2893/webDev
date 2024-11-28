@@ -1,0 +1,45 @@
+section {
+    margin-top: 100px;
+}
+
+div {
+    width: 200px;
+    height: 50px;
+    text-align: center;
+    background-color: #7aa874;
+    border: 2px solid black;
+    margin: 10px auto;
+}
+
+div:nth-last-of-type(2n) {
+    background-color: #f7db6a;
+}
+
+div:nth-last-of-type(3n) {
+    background-color: #ebb02d;
+}
+#one:hover{
+    transform: rotate(90deg);
+}
+
+#two:hover{
+    transform: scale(1.5);
+    /* transform: scaleX(1.5);
+    transform: scaleY(1.5); */
+}
+
+#three:hover{
+    transform: translateX(50px);
+    /* transform: translate(50px,50px);
+    transform: translateY(50px,50px); */
+}
+
+#four:hover{
+    transform: skew(45deg);
+    /* transform: skewX(45deg);
+    transform: skewY(45deg); */
+}
+
+#five:hover{
+    transform: rotate(90deg) scale(1.5) translateX(50px) skew(45deg);
+}
