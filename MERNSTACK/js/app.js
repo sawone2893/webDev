@@ -274,8 +274,47 @@ console.log(`Color names list after merge: ${colors}`);
 //8. reverse method - to reverse an array.
 console.log(`Reverse array: ${colors.reverse()}`);
 
-//9. slice method- copies portion of an array
+//9. slice method - copies portion of an array
 console.log(`colors.slice(): ${colors.slice()}`);
 console.log(`colors.slice(2): ${colors.slice(2)}`);
 console.log(`colors.slice(3,6): ${colors.slice(3,6)}`);
 console.log(`colors.slice(-3): ${colors.slice(-3)}`);
+
+//10. splice method - to remove/replace/add element in place.
+console.log(`Color names list: ${colors}`);
+console.log(`colors.splice(4): ${colors.splice(4)}`);
+console.log(`Color names list: ${colors}`);
+console.log(`colors.splice(0,1): ${colors.splice(3,6)}`);
+console.log(`Color names list: ${colors}`);
+console.log(`colors.splice(1,1,"Grey","Black"): ${colors.splice(1,1,"Grey","Black")}`);
+console.log(`Color names list: ${colors}`);
+console.log(`colors.splice(1,0,"Orange","Wheatish"): ${colors.splice(1,0,"Orange","Wheatish")}`);
+console.log(`Color names list: ${colors}`);
+
+//11. sort method- to sort String array elements.
+console.log(`Array after sorting: ${colors.sort()}`);
+
+//Array References:For every array new memory is allocated in memory pool.
+
+let arr=['a','b','c'];
+let arrCopy=['a','b','c'];
+console.log(`arr==arrCopy: ${arr==arrCopy}`);
+console.log(`arr===arrCopy: ${arr===arrCopy}`);
+arrCopy=arr;
+console.log(`arr==arrCopy after assignment arrCopy=arr: ${arr==arrCopy}`);
+console.log(`arr===arrCopy after assignment arrCopy=arr: ${arr===arrCopy}`);
+
+//Constant array:if any array is declared const then new array cannot be assigned to it.As it's address in the memory is fixed.
+
+const number3=[1,2,3,4];
+number3.push(5);
+number3.pop();
+console.log(`number3 Array values: ${number3}`);
+// number3=[7,8,9];
+// console.log(`number3 Array values after new array assigned [7,8,9]: ${number3}`);
+
+//Nested Array:Array inside an array or multi-dimesional arrays.
+let nums=[[2,3],[5,6],[7,8,9]];
+console.log(`Multi-dimensional Array: ${nums}`);
+console.log(`Multi-dimensional Array length: ${nums.length}`);
+console.log(`Accessing Multi-dimensional Array element: ${nums[0][1]}`);
