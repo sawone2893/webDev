@@ -3,8 +3,8 @@ body {
 }
 
 .btn {
-    height: 200px;
-    width: 200px;
+    height: 250px;
+    width: 250px;
     border-radius: 20%;
     border: 10px solid black;
     margin: 3rem;
@@ -29,4 +29,12 @@ body {
 
 .blue {
     background-color: blue;
+}
+
+.gameFlash{
+    background-color: white;
+}
+
+.userFlash{
+    background-color: pink;
 }
