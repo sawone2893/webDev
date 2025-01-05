@@ -1,0 +1,26 @@
+Git: Free and open source version control system.It's a tool that used to track chnages in the code.
+GitHub:Website where we hots out repositories online.
+
+Configuring Git:
+---------------
+git config --global user.name "Shabbir Rayeen"
+git config --global user.email "sawone2893@gmail.com"
+git config --list
+
+Basic Git Commands:
+------------------
+1. Clone repository:copies repository to local
+    Syntax: git clone <repositoryURl>
+
+2. Status:It get status of the local repository.
+    Syntax: git status
+
+3. Add:Adds new or chaged files in your working directory to the Git staging area
+    Syntax: git add <fileName> to add single file
+            git add . to add all files
+
+4. Commit:It is the record of the commit.
+    Syntax: git commit -m "commit message"
+
+5. Push:upload the local repo content to remote repo.
+    Syntax: git push origin main
