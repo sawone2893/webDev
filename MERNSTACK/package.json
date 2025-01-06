@@ -1,0 +1,15 @@
+{
+  "name": "mernstack",
+  "version": "1.0.0",
+  "description": "Web Developement Learning journey",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Shabbir Rayeen",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "random-words": "^2.0.1"
+  }
+}
