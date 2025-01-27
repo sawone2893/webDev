@@ -53,3 +53,4 @@ SELECT * FROM student;
 SELECT * FROM user;
 
 SELECT * FROM posts;
+SHOW TABLES;

@@ -1,0 +1,5 @@
+1. GET / => Show no. of users in DB
+2. GET /user => Show users (id,username,email)
+3. PATCH /user/:id => username edit
+4. POST /user => new user
+5. DELETE /user/:id => user delete
