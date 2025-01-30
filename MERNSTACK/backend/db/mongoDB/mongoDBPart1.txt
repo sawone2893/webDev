@@ -1,0 +1,164 @@
+MongoDB:It is  nosql database.
+Mongo Shell:It is CLI interface used to access database.
+            We can access mongo shell using below command.
+            Syntax: mongosh
+
+BSON Data: Binary JSON-In mongo db data is stored in BSON format.
+
+|               JSON                                        |            BSON                                                                         |
+|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+|Data is stored in text format                              |data is stored in Binary format                                                          |
+|Take more memory                                           |Take less memory                                                                         |
+|human-readable and machine- readable formats               |machine- readable format only.                                                           |
+|Use encoding UTF-8 String                                  |Use encoding Binary                                                                      |
+|Data Support: String, boolean, number, array, object, null |String, boolean, number (integer, float, long, decimal128...), array, null, date, BinData|
+
+Collections:It is group of BSON documents.It is similar as table in mySQL.
+Document:It is similar as row in mySQL.It stores values in key-value pairs. 
+-----------------------------------------------------------------------------------------------------
+Create database:
+        Syntax: use <databaseName>;
+        Example: use college;
+
+To view current database:
+        Syntax: db;
+
+To view all databases:
+        Syntax: show dbs;
+-----------------------------------------------------------------------------------------------------
+Insert in DB:
+============
+        Single Document:insertOne({key-value-pairs})
+                Syntax: db.collection.insertOne({key-value-pairs});
+                Example: db.student.insertOne({name:"Shabbir",address:"Lajpat Nagar, Konch,Jaluan,UP",cgpa:8});
+        
+        Multiple documents:insertMany(array of ducuments);
+                Syntax: db.collections.insertMany([{key-value-pairs},{key-value-pairs},{key-value-pairs},{key-value-pairs}....n]);
+                Example: db.student.insertMany([
+                        {name:"Shabbir",address:"Lajpat Nagar, Konch,Jaluan,UP",cgpa:8},
+                        {name:"Raj",address:"Lajpat Nagar, Konch,Jaluan,UP",cgpa:9},
+                        {name:"Raja",address:"Lajpat Nagar, Konch,Jaluan,UP",cgpa:9},
+                        {name:"Rajju",address:"Lajpat Nagar, Konch,Jaluan,UP",cgpa:8}
+                        ])
+                Example2: db.student.insertMany([{name:"Shabbir Rayeen",email:"sawone2893@gmail.com",marks:80},
+                        {name:"Shabbir Rayeen",email:"sawone2893@gmail.com",marks:80},
+                        {name:"Shabbir Rayeen",email:"sawone2893@gmail.com",marks:20},
+                        {name:"Shabbir Rayeen",email:"sawone2893@gmail.com",marks:10},
+                        {name:"Shabbir Rayeen",email:"sawone2893@gmail.com",marks:80},
+                        {name:"Shabbir Rayeen",email:"sawone2893@gmail.com",marks:40},
+                        {name:"Shabbir Rayeen",email:"sawone2893@gmail.com",marks:50},
+                        {name:"Shabbir Rayeen",email:"sawone2893@gmail.com",marks:60},
+                        {name:"Shabbir Rayeen",email:"sawone2893@gmail.com",marks:80},
+                        {name:"Shabbir Rayeen",email:"sawone2893@gmail.com",marks:70},
+                        {name:"Shabbir Rayeen",email:"sawone2893@gmail.com",marks:90}
+                        ]);
+-----------------------------------------------------------------------------------------------------
+Find in DB:
+===========
+        Return Everything:
+                Syntax:db.collection.find();//
+                Example: db.student.find();
+        
+        Return specific:
+                Using find:This returns cursor(reference of the document)
+                        Syntax: db.collection.find({key-value-pairs});
+                        Example1: db.collection.find({name:"Shabbir"});
+                        Example2: db.collection.find({name:"Shabbir",cgpa:9});
+                
+                Using findOne: This return actual document
+                        Syntax: db.collection.findOne({key-value-pairs});
+                        Example1: db.collection.find({name:"Shabbir"});
+                        Example2: db.collection.find({name:"Shabbir",cgpa:9});
+
+-------------------------------------------------------------------------------------------------
+Query Operators:
+        Comparison Query operators:
+                1. $eq: Matches values that are equal to a specified value
+                        Syntax: db.collectionName.find({ field: { $eq: <value> } });
+                        Example: db.student.find({marks:{$eq:75}});
+
+                2. $gt: Matches values that are greater than a specified value
+                        Syntax: db.collectionName.find({ field: { $gt: <value> } });
+                        Example: db.student.find({marks:{$gt:75}});
+
+                3. $gte: Matches values that are greater than or equal to a specified value
+                        Syntax: db.collectionName.find({ field: { $gte: <value> } });
+                        Example: db.student.find({marks:{$gte:75}});
+
+                4. $lt: Matches values that are less than a specified value
+                        Syntax: db.collectionName.find({ field: { $lt: <value> } });
+                        Example: db.student.find({marks:{$lt:75}});
+
+                5. $lte: Matches values that are less than or equal to a specified value
+                        Syntax: db.collectionName.find({ field: { $lte: <value> } });
+                        Example: db.student.find({marks:{$lte:75}});
+
+                6. $ne: Matches all values that are not equal to a specified value
+                        Syntax: db.collectionName.find({ field: { $ne: <value> } });
+                        Example: db.student.find({marks:{$ne:75}});
+                7. $in: Matches any of the values specified in an array
+                        Syntax: db.collectionName.find({ field: { $in: [<value1>, <value2>, ... <valueN> ] } });
+                        Example: db.student.find({marks:{$in:[75,80,76]}});
+
+                8. $nin: Matches none of the values specified in an array.
+                        Syntax: db.collectionName.find({ field: { $min: [<value1>, <value2>, ... <valueN> ] } });
+                        Example: db.student.find({marks:{$nin:[75,80,76]}});
+        
+        Logical Query Operators
+
+                1. $and: Joins query clauses with a logical AND returns all documents that match the conditions of both clauses
+                        Syntax: db.student.find({ $and: [ { <expression1> }, { <expression2> } , ... , { <expressionN> } ] });
+                        Example:db.student.find({ $and: [{marks:{$lte:75}},{name:{$eq:"Shabbir Rayeen"}}]});
+
+                2. $not: Inverts the effect of a query predicate and returns documents that do not match the query predicate
+                        Syntax: db.student.find( { field: { $not: { <operator-expression> } } });
+                        Example:db.student.find({ marks: { $not: { $gt:75 } } });
+
+                3. $nor: Joins query clauses with a logical NOR returns all documents that fail to match both clauses
+                        Syntax: db.student.find({ $nor: [ { <expression1> }, { <expression2> } , ... , { <expressionN> } ] });
+                        Example:db.student.find({ $nor: [{marks:{$lte:75}},{name:{$eq:"Shabbir Rayeen"}}]});
+
+                4. $or: Joins query clauses with a logical OR returns all documents that match the conditions of either clause.
+                        Syntax: db.student.find({ $or: [ { <expression1> }, { <expression2> } , ... , { <expressionN> } ] });
+                        Example:db.student.find({ $or: [{marks:{$lte:75}},{name:{$eq:"Shabbir Rayeen"}}]});
+
+-------------------------------------------------------------------------------------------------
+Update in DB:
+        Using updateOne:This is used to update one exising record.
+                Syntax: db.collection.updateOne(filter, update, options);
+                Example: db.student.updateOne({name:"Shabbir Rayeen"},{$set:{city:"Mumbai"}});
+
+        Using updateMany:This is used to update multiple exising records.
+                Syntax: db.collection.updateMany(filter, update, options);
+                Example: db.student.updateMany({name:"Shabbir Rayeen"},{$set:{city:"Mumbai"}});
+
+        Using replaceOne:This is used to replace one exising record.
+                Syntax: db.collection.replaceOne(filter, replacement, options)
+                Example: db.student.replaceOne({marks:80},{name:"Raj Kumar",email:"raj258@gmail.com",city:"Kolkata",marks:100});
+
+-------------------------------------------------------------------------------------------------
+Nesting:
+Example: In this scenarios, We are create a record which have nested object and we are trying to access value from there.
+        Inserting record in the db;
+        db.student.insertOne({name:"Farah",performane:{marks:80,grade:"A"}});
+        
+        Retrieving record based on the marks.
+        db.student.find({"performane.marks":80});
+        db.student.find({"performane.grade":"A"});
+
+-------------------------------------------------------------------------------------------------
+Delete in DB:
+        Using deleteOne:This is used to  delete first matching record from document.
+                Syntax: db.collection.deleteOne({condtions});
+                Example: db.student.deleteOne({marks:{$lt:60}});
+
+        Using deleteMany:This is used to  delete all matching record from document.
+                Syntax: db.collection.deleteMany({condtions});
+                Example: db.student.deleteMany({marks:{$lt:70}});
+
+        To empty our doucment:
+                Syntax:db.collection.deleteMany({});
+                Example: db.student.deleteMany({});
+
+        Using dropDatabase:This is used to  delete database.
+                Syntax: db.dropDatabase();
