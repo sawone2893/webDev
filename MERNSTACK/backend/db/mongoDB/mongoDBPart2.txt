@@ -195,3 +195,27 @@ Note: Schema Validation gets override when updation is done.
       .then(res=>console.log(res)).catch(err=>console.log(err));
 
 Handling Errors:
+const bookSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  author: {
+    type: String,
+  },
+  price: {
+    type: Number,
+    min:[1,"Selling price is too low"]
+  },
+  discount: {
+    type: Number,
+    default: 0,
+  },
+  category: {
+    type: String,
+    enum: ["fiction", "non-fiction"],
+  },
+});
+
+Book.findByIdAndUpdate("67b6a98d93545a42bb5b8ea0",{price:-100},{runValidators:true})
+      .then(res=>console.log(res)).catch(err=>console.log(err.errors.price.message));
