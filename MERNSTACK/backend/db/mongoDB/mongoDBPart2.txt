@@ -1,0 +1,197 @@
+Mangoose: It is a library used to connect with Mongo DB and Node JS.
+          It is ODM library.
+=================================================================================================          
+Database conection setup: 
+const mongoose = require("mongoose");
+main()
+  .then(() => {
+    console.log("Connection Successfully setup!");
+  })
+  .catch((err) => console.log(err));
+
+async function main() {
+  await mongoose.connect("mongodb://127.0.0.1:27017/test");
+  // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
+}
+=================================================================================================
+Schema:It defines the shape of the documents within that collection.
+Schema Creation: 
+const userSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  age: Number,
+});
+=================================================================================================
+Models: It is class with which we construct documents.
+        Model name is alway is equal to collection name.
+        Collection name is alway singular form as it is automatically converts to plural in mongoose.
+
+Model Creation:
+const User = mongoose.model("User", userSchema);
+=================================================================================================
+Operation bufferring:mongoose let us use the Models beforeactually setting up connection.
+=================================================================================================
+Creating a document:
+
+a. //inserting single user into mongoDB
+        const user1 = new User({
+        name: "Shabbir Rayeen",
+        email: "shabi2378@gmail.com",
+        age: 30,
+        });
+        user1
+        .save()
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+
+b. //inserting multiple users into mongoDB
+        User.insertMany(
+        [
+        {name: "Anish Rayeen",email: "anish@gmail.com",age: 28},
+        {name: "Yaseen Rayeen",email: "yaseen@gmail.com",age: 27},
+        {name: "Aphroj Rayeen",email: "aphroj@gmail.com",age: 30},
+        {name: "Feeroz Rayeen",email: "feeroz@gmail.com",age: 32},
+        {name: "Sana Rayeen",email: "sana@gmail.com",age: 35},
+        {name: "Sama Rayeen",email: "sama@gmail.com",age: 35},
+        {name: "Praveen Rayeen",email: "parveen@gmail.com",age: 35},
+        {name: "Niyaz Rayeen",email: "niyaz@gmail.com",age: 32}
+        ]).then((res)=>{
+        console.log(res);
+        });
+=================================================================================================
+Searching records:
+a. //Searching records in the mongoDB using find
+        User.find().then((res)=>{
+        console.log(res)
+        }).catch((err)=>{
+        console.log(err);
+        });
+
+b. //Searching records in the mongoDB using find with condition
+        User.find({age:{$gte:30}}).then((res)=>{
+        console.log(res)
+        }).catch((err)=>{
+        console.log(err);
+        });
+
+c. //Searching records in the mongoDB using findOne.
+        User.findOne().then((res)=>{
+        console.log(res);
+        }).catch((err)=>{
+        console.log(err);
+        });
+
+d. //Searching records in the mongoDB using findById.
+        User.findById("67b4058ed62577538bf30992").then((res)=>{
+        console.log(res);
+        }).catch((err)=>{
+        console.log(err);
+        });
+=================================================================================================
+Updates in mongoose:
+a.Update single record using updateOne.
+        User.updateOne({name:"Shabbir"},{age:31}).then((res)=>{
+        console.log(res)
+        }).catch((err)=>{
+        console.log(err);
+        });
+b.Update multiple record using updateMany.
+        User.updateMany({age:{$gt:32}},{age:50}).then((res)=>{
+        console.log(res)
+        }).catch((err)=>{
+        console.log(err);
+        });
+c. Find and update single record using findOneAndUpdate.
+        User.findOneAndUpdate({name:"Sana Rayeen"},{age:40},{new:true}).then((res)=>{
+        console.log(res)
+        }).catch((err)=>{
+        console.log(err);
+        });
+d. Find and update single record using findByIdAndUpdate.
+        User.findByIdAndUpdate("67b4058ed62577538bf30995",{age:40},{new:true}).then((res)=>{
+        console.log(res)
+        }).catch((err)=>{
+        console.log(err);
+        });
+
+=================================================================================================
+Delete in mongoose:
+a. Delete single record using deleteOne
+        User.deleteOne({name:"Shabbir"}).then((res)=>{
+        console.log(res)
+        }).catch((err)=>{
+        console.log(err);
+        });
+b. Delete multiple record using deleteMany
+        User.deleteMany({age:{$gte:40}}).then((res)=>{
+        console.log(res)
+        }).catch((err)=>{
+        console.log(err);
+        });
+c. Delete record using findByIdAndDelete
+        User.findByIdAndDelete("67b40079af80dd1ab7b0f44e").then((res)=>{
+        console.log(res)
+        }).catch((err)=>{
+        console.log(err);
+        });
+d. Delete record using findOneAndDelete
+        User.findOneAndDelete({age:{$gte:30}}).then((res)=>{
+        console.log(res)
+        }).catch((err)=>{
+        console.log(err);
+        });
+=================================================================================================
+Schema Validations:Rules for Schema definition.
+        const book=new mongoose.Schema({
+                title:{
+                        type:String,
+                        required:true
+                },
+                author:{
+                        type:String
+                }
+                price:{
+                        type:Number
+                }
+        });
+==================================================================================================
+Schematypes Options:
+a. required: boolean or function, if true adds a required validator for this property
+b. default: Any or function, sets a default value for the path. If the value is a function, the return value of the function is used as the default.
+c. select: boolean, specifies default projections for queries
+d. validate: function, adds a validator function for this property
+e. get: function, defines a custom getter for this property using Object.defineProperty().
+f. set: function, defines a custom setter for this property using Object.defineProperty().
+g. alias: string, mongoose >= 4.10.0 only. Defines a virtual with the given name that gets/sets this path.
+h. immutable: boolean, defines path as immutable. Mongoose prevents you from changing immutable paths unless the parent document has isNew: true.
+i. transform: function, Mongoose calls this function when you call Document#toJSON() function, including when you JSON.stringify() a document.
+
+        const book=new mongoose.Schema({
+                title:{
+                        type:String,
+                        required:true
+                },
+                author:{
+                        type:String
+                }
+                price:{
+                        type:Number
+                },
+                discount:{
+                        type:Number,
+                        default:0
+                },
+                category:{
+                        type:String,
+                        enum:["fiction","non-fiction"]
+                }
+        });
+
+==================================================================================================
+Note: Schema Validation gets override when updation is done.
+      To enable schema validation in updation, we shoud pass "runValidators:true" property.
+
+      Book.findByIdAndUpdate("67b6a98d93545a42bb5b8ea0",{price:-100},{runValidator:true})
+      .then(res=>console.log(res)).catch(err=>console.log(err));
+
+Handling Errors:
