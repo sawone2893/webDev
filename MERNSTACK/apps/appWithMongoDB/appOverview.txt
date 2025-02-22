@@ -1,0 +1,12 @@
+1. Index Route:
+    GET /chats show all chats.
+
+2. New and Create Route
+    a. GET /chats/new - display new form
+    b. POST /chats - insert the chat into DB
+
+3. Edit and update Route
+    a. GET /chats/:id/edit - display edit form
+    b. PUT /chats/:id - update chat in the DB.
+4. Destro Route
+    DeLETE .chats/:id -  delete the chat
