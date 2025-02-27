@@ -1,0 +1,34 @@
+::::::::::::::::::::::::::::::::::::::::Major Project Phase 1 Part A::::::::::::::::::::::::::::::::::::::::
+1. Basic set up:
+    a. create package.json file
+    b. install dependencies like express,ejs,mongoose etc...
+    c. create a app.js file and add cod to set up server and database connection.
+
+2. Model creation:
+    a. Create folder models
+    b. Add listing.js file - 
+        Listing - place> title,description,image,price,location,country
+
+3. Initialize database:
+    a. Create a folder named init.
+    b. Add data.js - This will contains details of the places.
+    c. index.js - This will contain code to Initialize database with deafult records.
+
+4. Index Route:
+    GET /listings - this will show all the available listing.
+
+5. READ - Show Route:
+    GET /listings/:id - This show details of the specific listing.
+
+6. CREATE - New and Create Route:
+    GET /listings/new - fetch the New form
+    POST /listings - Create a new listing
+
+7. Edit and Update Route
+    GET /listings/:id/edit - fetch the edit form
+    PUT /listings/:id - update the record in the DB.
+
+    install method-override dependency.
+
+8. Delete Route:
+    DELETE /listings/:id - Delete the record from the DB.
