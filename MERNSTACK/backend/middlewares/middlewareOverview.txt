@@ -59,3 +59,80 @@ Error handling:
                 app.get("/random", checkToken, (req, res) => {
                 res.send("data");
                 });
+==============================================================================================
+Error Handling Middlewares:
+        Error-handling middleware always takes four arguments.
+        You must provide four arguments to identify it as an error-handling middleware function. 
+        Even if you don’t need to use the next object, you must specify it to maintain the signature.
+        Otherwise, the next object will be interpreted as regular middleware and will fail to handle errors.
+
+        Define error-handling middleware functions in the same way as other middleware functions, 
+        except with four arguments instead of three, specifically with the signature (err, req, res, next):
+        
+        Example:
+                app.use((err, req, res, next) => {
+                console.error(err.stack)
+                res.status(500).send('Something broke!')
+                })
+
+=================================================================
+Custom Error handling:
+
+        Example:
+                Example:
+                let checkToken = (req, res, next) => {
+                let { token } = req.query;
+                if (token === "giveaccess") {
+                next();
+                }
+                throw new ExpressError(401,"ACCESS DENIED!");here we are using our error handling class:ExpressError
+                };
+
+                app.get("/random", checkToken, (req, res) => {
+                res.send("data");
+                });
+=================================================================================
+Error Class:
+        Example-
+
+        class ExpressError extends Error {
+        constructor(status, message) {
+        super();
+        this.status = status;
+        this.message = message;
+        }
+        }
+
+module.exports = ExpressError;
+=================================================================================
+Async Error handling:
+        1. id does not exist.
+        2. Validation error:we can handle is type of error using try catch
+=================================================================================
+Using wrapAsync function: It is function which take function as agruement and return a function.
+        Example:
+        function asyncWrap(fn){
+                return function (req,res,next){
+                        fn(req,res,next).catch(err)=>next(err);
+                };
+        }
+
+        app.get("/random", checkToken, asyncWrap((req, res) => {
+                res.send("data");
+                }));
+==============================================================================
+Mongoose Errors:
+        Example:
+                const handleValidationErr=(err)=>{
+                        console.log("This was a Validation error. Please follow rules");
+                        console.log(err.message)
+                        return err;
+                }
+
+                app.use((err, req, res, next) => {
+                        console.log(err.name);
+                        if(err.name==="ValidationError"){
+                                err=handleValidationErr(err);
+                        }
+                        next(err);
+                });

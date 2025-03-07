@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const ExpressError = require("../middlewares/ExpressError");
 
 const port = 8080;
 //Note:Whatever request you send but only middleware will be getting executed.
@@ -47,13 +48,20 @@ app.use("/api", (req, res, next) => {
 });
 //Note: Middleware are also used for the client authenticaion.
 
+// let checkToken = (req, res, next) => {
+//   let { token } = req.query;
+//   if (token === "giveaccess") {
+//     next();
+//   }
+//   throw new Error("ACCESS DENIED!");
+// };
 
 let checkToken = (req, res, next) => {
   let { token } = req.query;
   if (token === "giveaccess") {
     next();
   }
-  throw new Error("ACCESS DENIED!");
+  throw new ExpressError(401, "ACCESS DENIED!");
 };
 
 app.get("/", (req, res) => {
@@ -71,8 +79,38 @@ app.get("/random", checkToken, (req, res) => {
 
 //Error handling:
 app.get("/wrong", (req, res) => {
-  abcd="nsda";
+  abcd = "nsda";
 });
+
+app.get("/error", (req, res) => {
+  bcd = DocumentFragment;
+});
+
+//Error Handling Middlewares:
+/**
+app.use((err, req, res, next) => {
+  console.log("==================ERROR1===================")
+  next(err);
+});
+app.use((err, req, res, next) => {
+  console.log("==================ERROR2===================")
+  next(err);
+});
+ */
+
+//Custom Error handling
+/**
+ app.use((err, req, res, next) => {
+  console.log("==================ERROR1===================")
+ res.send(err);
+});
+ */
+
+app.use((err, req, res, next) => {
+  let { status=500, message="Some Error" } = err;
+  res.status(status).send(message);
+});
+
 app.listen(port, () => {
   console.log(`Server listening at port ${port}`);
 });
