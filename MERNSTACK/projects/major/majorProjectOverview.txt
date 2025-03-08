@@ -71,3 +71,30 @@
 
 6. Styling Show Listing:
     a. Coverting show.ejs to bootstrap card design
+
+::::::::::::::::::::::::::::::::::::::::Major Project Phase 1 Part C - Client Side Validation and Error Handling::::::::::::::::::::::::::::::::::::::::
+
+1. Client Side Validation:Form Validation- We enter data in the form is in the correct format and follow the constraint set by the application.
+    a. We will use bootstrap form validation.
+    b. We add required attribute to the field that are mandatory to fill.
+    c. For custom Bootstrap form validation messages, we will need to add the novalidate boolean attribute to our <form>. 
+        This disables the browser default feedback tooltips.
+    d. We will add bootstrap class: needs-validation to our form.
+    e. We add script.js file to out js folder inside public folder to handle form validation.
+    f. We will add success snd failure text to our fields using below code:
+        <div class="invalid-feedback">Please enter country</div>
+
+2. Server side validation:
+    a. Custom Error Handler:We will add error handling middleware.
+    b. Custom asyncwrap:We will create utilty for asyncwrap to handle error efficiently.
+    c. Custom ExpressError:We add class: ExpressError to handle custom error.
+    d. Creating default error.ejs page.
+
+3. Validation for Schema: 
+    a. We will be using new library "joi" to validate schema.
+    b. install the npm package joi using command: npm i joi;
+    c. Create a js file called schema.js for listingSchema object validation and export it.
+
+4. Validating schema using middleware:
+    a. We will create middleware function called "validateListing"
+    b. This we will pass in api endpoint as middleware.
