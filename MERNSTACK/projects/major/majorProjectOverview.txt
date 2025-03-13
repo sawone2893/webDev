@@ -98,3 +98,35 @@
 4. Validating schema using middleware:
     a. We will create middleware function called "validateListing"
     b. This we will pass in api endpoint as middleware.
+
+::::::::::::::::::::::::::::::::::::::::Major Project Phase 2 Part A - Creating Review Model Functionality ::::::::::::::::::::::::::::::::::::::::
+1. Creating Review Model:
+    a. Add new Schema for Review in model folder.
+    b. Every listing will have some reviews so there will be 1 to many relationship between listing and review model.
+        We will add reviews array to our listing and update it's schema.
+    c. Updating Listing Details heading with listing title.
+
+2. Create Review:
+    a. Add new form inside show.ejs to add review for the specific listing.
+    b. Use the bootstrap to create Review Form.
+    c. Submitting a review form at Review Route: POST /listings/:id/reviews.
+
+3. Validation for Reviews:
+    a.Client side Validation - Form Validation using bootstrap.
+    b.Server side Validation using Joi.
+
+4. Render Reviews:
+    a. Display all review of the particular listing on the show page along with it's rating.
+
+5. Adding Styling to reviews:
+    a. Display review in card format.
+
+6. Delete review:
+    a.Adding functionality to delete individual review.
+    b. Add a delete button for each review.
+    c.Create a delete review route: DELETE /listing/:id/reviews/:reviewId
+
+7. Handling delete listing:
+    a. delete the listing.
+    b. Need to delete all the reviews related that listing.
+        We will be using post middleware to do this.
