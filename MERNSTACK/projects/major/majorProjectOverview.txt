@@ -130,3 +130,10 @@
     a. delete the listing.
     b. Need to delete all the reviews related that listing.
         We will be using post middleware to do this.
+
+:::::::::::::::::::::::::::::::::::::::: Major Project Phase 2 Part B - Implementing Express Router ::::::::::::::::::::::::::::::::::::::::
+1. Restructuring Listing:
+    a. Moving listings related routes from "app.js" to "routes/listing.js".
+
+2. Restructuring Review:
+    a. Moving reviews related routes from "app.js" to "routes/review.js".

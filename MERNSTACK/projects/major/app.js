@@ -1,14 +1,12 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const Listing = require("./models/listings");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-const warpAsync = require("./utils/wrapAsync");
 const ExpressError = require("./utils/ExpressError");
-const { listingSchema, reviewSchema } = require("./schema");
-const Review = require("./models/review");
+const listings =require("./routes/listing");
+const reviews=require("./routes/review");
 
 const MONGODB_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
@@ -43,118 +41,9 @@ app.get("/", (req, res) => {
   res.send("Root is working");
 });
 
-const validateListing = (req, res, next) => {
-  let { error } = listingSchema.validate(req.body);
-  if (error) {
-    let errMsg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(400, errMsg);
-  } else {
-    next();
-  }
-};
+app.use("/listings",listings);
 
-const validateReview = (req, res, next) => {
-  let { error } = reviewSchema.validate(req.body);
-  if (error) {
-    let errMsg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(400, errMsg);
-  } else {
-    next();
-  }
-};
-
-//Index Route:
-app.get(
-  "/listings",
-  warpAsync(async (req, res) => {
-    let allListings = await Listing.find({});
-    res.render("listings/index.ejs", { allListings });
-  })
-);
-
-//New Route:
-app.get("/listings/new", (req, res) => {
-  res.render("listings/new.ejs");
-});
-
-//Show Route:
-app.get(
-  "/listings/:id",
-  warpAsync(async (req, res) => {
-    let { id } = req.params;
-    const listing = await Listing.findById(id).populate("reviews");
-    console.log(listing);
-    res.render("listings/show.ejs", { listing });
-  })
-);
-
-//Create Route
-app.post(
-  "/listings",
-  validateListing,
-  warpAsync(async (req, res, next) => {
-    const listing = new Listing(req.body.listing);
-    await listing.save();
-    res.redirect("/listings");
-  })
-);
-
-//Edit Route:
-app.get(
-  "/listings/:id/edit",
-  warpAsync(async (req, res) => {
-    let { id } = req.params;
-    let listing = await Listing.findById(id);
-    res.render("listings/edit.ejs", { listing });
-  })
-);
-
-//Update Route:
-app.put(
-  "/listings/:id",
-  validateListing,
-  warpAsync(async (req, res) => {
-    let { id } = req.params;
-    await Listing.findByIdAndUpdate(id, { ...req.body.listing });
-    res.redirect(`/listings/${id}`);
-  })
-);
-
-//Delete Route:
-app.delete(
-  "/listings/:id",
-  warpAsync(async (req, res) => {
-    let { id } = req.params;
-    let deletedListing = await Listing.findByIdAndDelete(id);
-    console.log(deletedListing);
-    res.redirect("/listings");
-  })
-);
-
-//Review Create Route:
-app.post(
-  "/listings/:id/reviews",
-  validateReview,
-  warpAsync(async (req, res) => {
-    const listing = await Listing.findById(req.params.id);
-    const newReview = new Review(req.body.review);
-    listing.reviews.push(newReview);
-    await newReview.save();
-    await listing.save();
-    res.redirect(`/listings/${listing._id}`);
-  })
-);
-
-//Review Delete Route:
-app.delete(
-  "/listings/:id/reviews/:reviewId",
-  warpAsync(async (req, res) => {
-    let { id, reviewId } = req.params;
-    await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
-    await Review.findByIdAndDelete(reviewId);
-    res.redirect(`/listings/${id}`);
-  })
-);
+app.use("/listings/:id/reviews",reviews);
 
 app.all("*", (req, res, next) => {
   next(new ExpressError(404, "Page not found!"));
