@@ -137,3 +137,41 @@
 
 2. Restructuring Review:
     a. Moving reviews related routes from "app.js" to "routes/review.js".
+
+
+:::::::::::::::::::::::::::::::::::::::: Major Project Phase 2 Part C - Implementing Session and Flash ::::::::::::::::::::::::::::::::::::::::
+1. Implementing Express Session:
+    a. Install express-session
+    b. Add Session options.
+    c. Add cookies option to Session
+        //Setting session options and cookies.
+        const sessionOptions = {
+        secret: "mysupersecretcode",
+        resave: false,
+        saveUninitialized: true,
+        cookies: {
+            expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+            maxAge: Date.now() + 7 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+        },
+        };
+    d. Use the session
+        const session = require("express-session");
+        app.use(session(sessionOptions));
+
+2. Implementing Flash
+    a. Install connect-flash.
+    b. Import flash- const flash = require("connect-flash"); 
+    c. Add - app.use(flash()); before making any request.
+    d. Add middleware for handling flash message.
+        app.use((req, res, next) => {
+        res.locals.successMsg = req.flash("success");
+        next();
+        });
+    e. Add your flash message in your listing creation request.
+        req.flash("success", "New Lisiting create!");
+    f. Access your flash message where you want to display.Here it is index.ejs.
+        <%= successMsg %>
+
+3. Adding success and error partials: Implementing flash message using includes.
+    a. create includes:flash.ejs

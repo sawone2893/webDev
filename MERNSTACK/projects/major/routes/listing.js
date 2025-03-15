@@ -35,7 +35,10 @@ router.get(
   warpAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id).populate("reviews");
-    console.log(listing);
+    if (!listing) {
+      req.flash("error", "Listing you requested does not exist!");
+      res.redirect("/listings");
+    }
     res.render("listings/show.ejs", { listing });
   })
 );
@@ -47,6 +50,7 @@ router.post(
   warpAsync(async (req, res, next) => {
     const listing = new Listing(req.body.listing);
     await listing.save();
+    req.flash("success", "New Lisiting created!");
     res.redirect("/listings");
   })
 );
@@ -57,6 +61,10 @@ router.get(
   warpAsync(async (req, res) => {
     let { id } = req.params;
     let listing = await Listing.findById(id);
+    if (!listing) {
+      req.flash("error", "Listing you requested does not exist!");
+      res.redirect("/listings");
+    }
     res.render("listings/edit.ejs", { listing });
   })
 );
@@ -68,6 +76,7 @@ router.put(
   warpAsync(async (req, res) => {
     let { id } = req.params;
     await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+    req.flash("success", "Updated Lisiting!");
     res.redirect(`/listings/${id}`);
   })
 );
@@ -78,7 +87,7 @@ router.delete(
   warpAsync(async (req, res) => {
     let { id } = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
-    console.log(deletedListing);
+    req.flash("success", "Lisiting deleted!");
     res.redirect("/listings");
   })
 );
