@@ -5,10 +5,14 @@ const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError");
-const listings = require("./routes/listing");
-const reviews = require("./routes/review");
+const listingsRouter = require("./routes/listing");
+const reviewsRouter = require("./routes/review");
 const session = require("express-session");
 const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user");
+const usersRouter = require("./routes/user");
 
 const MONGODB_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
@@ -54,6 +58,15 @@ const sessionOptions = {
 app.use(session(sessionOptions));
 app.use(flash());
 
+//Passport configuring strategy for authentication
+app.use(passport.initialize());
+app.use(passport.session());
+//use static authenticate method of model in LocalStrategy
+passport.use(new LocalStrategy(User.authenticate()));
+//use static serialize and deserialize of model for passport session support
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.get("/", (req, res) => {
   res.send("Root is working");
 });
@@ -64,9 +77,10 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/listings", listings);
+app.use("/listings", listingsRouter);
 
-app.use("/listings/:id/reviews", reviews);
+app.use("/listings/:id/reviews", reviewsRouter);
+app.use("/", usersRouter);
 
 app.all("*", (req, res, next) => {
   next(new ExpressError(404, "Page not found!"));

@@ -175,3 +175,64 @@
 
 3. Adding success and error partials: Implementing flash message using includes.
     a. create includes:flash.ejs
+
+:::::::::::::::::::::::::::::::::::::::: Major Project Phase 2 Part D - Authentication and Authorization ::::::::::::::::::::::::::::::::::::::::
+Concepts:-------------------------------------------------------------------------------------
+Authentication:
+    It is the process of verify who is the someone.
+
+Authorization:
+    It is the process of verifying what accesses someone has.
+
+Storing Password:
+    We never store password as it is form.
+    We store password in hashed form.
+    Hashing functions are used convert password into hashed form.
+
+Hashing:
+    It has fixed length for every input.
+    Every different input there is different output but same length.
+    Slight change in input will result into large chnage in output.
+
+Salting:
+    It is technique to generate hashed form  of the password by adding salt [string of 32 or more character] to it before actually storing  it into database.
+
+Passport:
+    Passport is authentication middleware for Node.js.
+    Extremely flexible and modular.
+    A comprehensive set of strategies support authentication using a username and password, Facebook, Twitter, and more.
+
+    a. passport: Passport is Express-compatible authentication middleware for Node.js.
+    Syntax: npm i passport
+
+    b. passport-locals - Passport strategy for authenticating with a username and password.
+    Syntax: npm i passport-local
+
+    c. passport-local-mongoose: Passport-Local Mongoose is a Mongoose plugin that simplifies building username and password login with Passport.
+    Syntax: npm i passport-local-mongoose
+
+-----------------------------------------------------------------------------
+1. New model: User.
+    a. Create a new User Schema and Model.
+    b. This have fields like email, username and password
+    c. username and password will be taking care by passport-local-mongoose.
+
+2. Configuring strategy:
+    a. To use Passport in an Express or Connect-based application, configure it with the required passport.initialize() middleware.
+    b. If our application uses persistent login sessions, passport.session() middleware must also be used.
+    c. Requires the model with Passport-Local Mongoose plugged in.
+    d. Use static authenticate method of model in LocalStrategy.
+    e. Use static serialize and deserialize of model for passport session support.
+
+3. Sign up User:
+    a. Add a route user.js to "routes" folder.
+    b. Add a view "users" inside views folder then add file signup.ejs to "users" folder.
+    c. Fetch a Signup form using GET /signup route
+    d. create - POST /signup route
+    e.Insert the user to db.
+
+4. Login User:
+    a. Add file login.ejs to "users" folder.
+    b. Fetch a login form using GET /login route
+    c. create POST /login route
+    d. Verify the login user
