@@ -236,3 +236,62 @@ Passport:
     b. Fetch a login form using GET /login route
     c. create POST /login route
     d. Verify the login user
+
+:::::::::::::::::::::::::::::::::::::::: Major Project Phase 2 Part E - Implementing Authentication and Authorization ::::::::::::::::::::::::::::::::::::::::
+1. Connecting Login Route:
+    a.User should logged in when adding new, deleting, and editing listing.
+    b.We will add "isLoggedIn" middleware to authenticate this.
+
+2. Logout User:
+    a. Create route GET /logout.
+
+3. Display Signup,Login and logout option in nav bar.
+    a. We will check state wether user is logged in or not.
+    b. if user logged in then display Logout otherwise Signup and Login option on nav bar.
+
+4. Login after Signup:
+    a. We will use req.login() method from passport.
+
+5. Post login page:
+    a.If we are accessing anything on application without login then it should ask for login afterward it should redirect to desired section of the application.
+
+6. Listing Owner:
+    a. Now we need to associate the owner with listing.
+    b. We need to update the listing schema and need to add owner field to it.
+        owner:{
+            type:Schema.Types.ObjectId,
+            ref:"User"
+        }
+    c. Now we need to re-initialize data in the DB with Owner info.
+    d. In Show Route:- we will add owner also.
+    e. In show listing:show.ejs - we will display owner. and will update listing card styling.
+    f. We need to add owner whenever new listing[inside - Create Route] is created from the app.
+        newListing.owner=req.user._id;
+
+7. Setting Authorization for listing:
+    a. One who created the listing,will only be able to edit or delete particular listing.
+    b. In show.ejs - we can compare the current user id and owner id stored in the DB then we will display edit or Delete buttons on UI if both matches otherise not.
+    c. We need to protect our Edit, update and delete routes from unauthorized owner.
+    d. We will add new middleware called isOwner.
+    e. We will pass middleware:isOwner to Edit, Update and Delete Route.
+    e. Consolidated all the middleware into single file called "middleware.js".
+
+8. Review Authors:
+    a. Now we need to associate the author with review.
+    b. We need to update the review schema and need to add author field to it.
+        author:{
+            type:Schema.Types.ObjectId,
+            ref:"User"
+        }
+    c. Now we need to re-initialize data in the DB with author info.
+    d. In Show Route:- we will add author also.
+    e. In show listing:show.ejs - we will display review section if only if user is registered.
+    f. We need to add auther whenever new review[inside - Create Route] is created from the app.
+        newReview.authro=req.user._id;
+
+9. Setting Authorization for review:
+    b. In show.ejs - We need to show Add new Review section only if user is logged in.
+    b. One who created the review,will only be able to delete particular review.
+    c. We need to protect our delete routes from unauthorized author.
+    d. We will add new middleware called isReviewAuthor.
+    e. We will pass middleware:isReviewAuthor to Delete Route.
