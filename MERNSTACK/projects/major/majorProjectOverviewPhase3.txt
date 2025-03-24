@@ -1,0 +1,150 @@
+::::::::::::::::::::::::::::::::::::::::Major Project Phase 3 Part A- MVC design pattern implementation,Router.route,Re-styling rating,Image Upload and Save files in local and Cloud ::::::::::::::::::::::::::::::::::::::::
+1. MVC: Model View Controller-It is design pattern for maintaining the code base.
+    Model-Stores the schema
+    View-Stores the rendering files.
+    Controller-Stores the core functionality of the backend.
+
+    a. Implementing MVC for listing-
+        i. Create folder a called "Controllers"
+        ii. Add a Controller file called "listings.js" for listing.
+        iii. Move the backend code from routes/listing.js to this controller.
+    
+    b. Implementing MVC for review-
+        ii. Add a Controller file called "reviews.js" for listing.
+        iii. Move the backend code from routes/review.js to this controller.
+    
+    c. Implementing MVC for user-
+        ii. Add a Controller file called "users.js" for listing.
+        iii. Move the backend code from routes/user.js to this controller.
+
+2. Router.route:
+    Use router.route() to avoid duplicate route naming and thus typing errors.
+    Returns an instance of a single route which we can then use to handle HTTP verbs with optional middleware
+
+    a. Implementing router.route to listing route
+    b. Implementing router.route to review route
+    c. Implementing router.route to user route
+
+3. Re-styling rating
+    a. We will use library called starablity [https://github.com/LunarLogic/starability] to implement star based rating.
+    b. We need to add css file:rating.css and save the default css for starablity-slot [https://github.com/LunarLogic/starability/blob/master/starability-css/starability-slot.css] to our css folder.
+    c. Add this css file at the end of head section of boilerplate.
+        <link rel="stylesheet" href="css/rating.css" />
+    d. Copy below the starability-slot html code for displaying star on the UI and add it to show.ejs
+        <div class="mb-3 mt-3">
+        <label for="rating" class="form-label">Rating</label>
+        <fieldset class="starability-slot">
+          <input
+            type="radio"
+            id="no-rate"
+            class="input-no-rate"
+            name="review[rating]"
+            value="1"
+            checked
+            aria-label="No rating."
+          />
+          <input
+            type="radio"
+            id="first-rate1"
+            name="review[rating]"
+            value="1"
+          />
+          <label for="first-rate1" title="Terrible">1 star</label>
+          <input
+            type="radio"
+            id="first-rate2"
+            name="review[rating]"
+            value="2"
+          />
+          <label for="first-rate2" title="Not good">2 stars</label>
+          <input
+            type="radio"
+            id="first-rate3"
+            name="review[rating]"
+            value="3"
+          />
+          <label for="first-rate3" title="Average">3 stars</label>
+          <input
+            type="radio"
+            id="first-rate4"
+            name="review[rating]"
+            value="4"
+          />
+          <label for="first-rate4" title="Very good">4 stars</label>
+          <input
+            type="radio"
+            id="first-rate5"
+            name="review[rating]"
+            value="5"
+          />
+          <label for="first-rate5" title="Amazing">5 stars</label>
+        </fieldset>
+      </div>
+    e. If you want to diasplay saved rating in star.Update below code in show.ejs in place of p tag where rating is getting display in numbers.
+        <p class="starability-result card-text" data-rating="<%= review.rating%>"></p>
+
+4. Image upload and save in local:
+    a. We need to make form capable of sending files.
+        i. We need to maniplulate the add new listing form [new.ejs].We need to set enctype ="multipart/form-data" for form.
+          <form action="/listings" method="post" novalidate class="needs-validation" enctype="multipart/form-data">
+        ii. We need to change type attribute value to file for input element [new.ejs].
+          <div class="mb-3">
+            <label for="image" class="form-label">Upload Listing Image</label>
+            <input type="file" name="listing[image]" class="form-control" />
+          </div>
+        iii. Multer- Multer is a node.js middleware for handling multipart/form-data, which is primarily used for uploading files.
+             Multer will not process any form which is not multipart (multipart/form-data)
+             * We need to install multer library to achieve this.
+                npm i multer
+             * Now add below line of code to access upload file.
+                const multer  = require('multer');
+                const upload = multer({ dest: 'uploads/' });
+             * Pass the middleware: upload.single(listing[image]') in your post route.
+             * Access file attributes using below code
+                req.file
+5. Image upload and save in Cloud:
+    a. We will use 3rd party service:Cloudinary.
+    b. Create your account on Cloudinary Platform [https://cloudinary.com/users/register_free] using your GitHub account.
+    c. We will stores our credentials inside .env file.
+    d. To access .env file data we need to install dotenv library
+        [Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env.]
+        npm i dotenv
+        require('dotenv').config()
+        console.log(process.env)
+    e. Create a .env file and store CLOUD_NAME,CLOUD_API_KEY and CLOUD_API_SECRET in it.
+    f. Add below code inside the app.js file at the very top for access .env file data.
+      if(process.env.NODE_ENV!="production"){
+        require('dotenv').config();
+      }
+    g. We need to install below libraries to store files in Cloudinary Platform.
+        i. cloudinary - The Cloudinary Node SDK allows you to quickly and easily integrate your application with Cloudinary.
+                        Effortlessly optimize, transform, upload and manage your cloud's assets.
+                        npm i cloudinary
+
+        ii. multer-storage-cloudinary - A multer storage engine for Cloudinary.
+                                        npm i multer-storage-cloudinary
+    h. Now ,create a cloudConfig.js file where we will setup configuration to connect with Cloudinary Platform.
+    i.Then, use cloudConfig  in add new listing [routes/listing.js] request for upload images to Cloudinary Platform.
+        const multer = require("multer");
+        const {storage} = require("../cloudConfig");
+        const upload = multer({ storage });
+
+  6. Save the generated link into mongoDb:
+    a. We will update the listingSchema for image property as below.
+        image:{
+          url:String,
+          filename:String
+        }
+    b. We pass our middleware: upload.single("listing[image]") to our listing create route.
+    c. We will extract url and filename from req.file and save it into mongoDb in our listingController.
+        let url=req.file.path;
+        let filename=req.file.filename;
+        newListing.image={url,filename};
+  
+  7 . Re-initialize listing data in data with new format.
+      a. We can download data.js file from github [https://github.com/apna-college/wanderlust/blob/main/init/data.js] and replace it with our data.js file.
+      b. Run the index.js file to update data in mongoDb
+          node index.js
+      c. We need to update code from [<%= listing.image %>] to [<%= listing.image.url %>] for access image in below locations
+        i. views/listings/index.ejs
+        ii. views/listings/show.ejs
