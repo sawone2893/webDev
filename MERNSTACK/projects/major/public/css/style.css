@@ -94,16 +94,24 @@ body {
 }
 
 /*New Page*/
-.add-btn,.update-btn,.edit-btn{
+.add-btn,
+.update-btn,
+.edit-btn {
     background-color: #fe424d !important;
     border: none !important;
 }
 
-.btns{
+.btns {
     display: flex;
 }
 
-.show-card{
+.show-card {
     padding-left: 0;
     padding-right: 0;
+}
+
+/** Map **/
+#map {
+    height: 400px;
+    width: 80vh;
 }

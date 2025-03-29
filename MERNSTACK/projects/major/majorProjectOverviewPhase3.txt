@@ -148,3 +148,148 @@
       c. We need to update code from [<%= listing.image %>] to [<%= listing.image.url %>] for access image in below locations
         i. views/listings/index.ejs
         ii. views/listings/show.ejs
+
+:::::::::::::::::::::::::::::::::::::::: Major Project Phase 3 Part B Edit Listing Image and Maps ::::::::::::::::::::::::::::::::::::::::
+1. Edit Listing image:
+    a. We need to make form capable of sending files.
+        i. We need to maniplulate the aedit listing form [edit.ejs].We need to set enctype ="multipart/form-data" for form.
+          <form action="/listings/<%= listing._id %>?_method=PUT" method="post" novalidate class="needs-validation" enctype="multipart/form-data">
+        ii. We need to change type attribute value to file for input element [edit.ejs].
+          <div class="mb-3">
+            <label for="image" class="form-label">Upload Listing Image</label>
+            <input type="file" name="listing[image]" class="form-control" />
+          </div>
+    b. We pass our middleware: upload.single("listing[image]") to our listing update route.
+    c. We will extract url and filename from req.file and save it into mongoDb in our listingController.
+        if (typeof req.file != "undefined") {
+          let url = req.file.path;
+          let filename = req.file.filename;
+          listing.image = { url, filename };
+          listing.save();
+        }
+2. Image Preview for Edit page:
+    a. We will add image tag before upload input.
+        <div class="mb-3">
+        Original Lsiting Image
+        <img src="<%= originalImageUrl %>" alt="listingImage" />
+      </div>
+    b. We will reduce the pixels for the original image for preview using cloudinary.
+    c. We will update the logic for the same in the renderEditFrom middleware in listing controller.
+        let originalImageUrl=listing.image.url;
+        originalImageUrl.replace("/upload","/upload/w_250");
+        res.render("listings/edit.ejs", { listing,originalImageUrl});
+
+3. Implementing Maps:
+    a. We use MapBox API to display maps in our listing.
+    b. We Will create account on MapBox Platform.
+    c. We will store public token in our .env file to use this API.
+    d. We will use Mapbox GL JS library 
+                  [It is a client-side JavaScript library for building web maps and web applications with Mapbox's modern mapping technology.
+                  You can use Mapbox GL JS to display Mapbox maps in a web browser or client, add user interactivity, and customize the map experience in your application.]
+    
+    e. Add below css and js to your boilerplate.
+        <link href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css" rel="stylesheet">
+        <script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
+    
+    f.Add a div on show.ejs page below All review  sction where we wan to show out map.
+        <div class="col-8 offset-3 mb-3">
+          <h3>Where you'll be</h3>
+          <div id="map"></div>
+        </div>
+    g. Need to add styling to our map.We will add below styling to our style.css.
+        #map {
+            height: 400px;
+            width: 80vh;
+        }
+    h. Create a map.js file inside public/js and paste below code init.
+        mapboxgl.accessToken =mapToken;
+        const map = new mapboxgl.Map({
+          container: "map", // container ID
+          center: [-74.5, 40], // starting position [lng, lat]. Note that lat must be set between -90 and 90
+          zoom: 9, // starting zoom
+        });
+    i. Include below script tag at the start of the show.ejs to access Map token.
+        <script>
+          const mapToken = "<%= process.env.MAP_TOKEN%>";
+        </script>
+    j. Include map.js file inside script tag in show.ejs at the end.
+        <script src="/js/map.js"></script>
+
+4. Implementing Geocoding: It is process of conveting addresses[like a street addresses] into geographical coordinates[latitudes and longitude].
+                          This we can use to place a marker on Map or position the Map.
+      a. We will use Geocoding API provided by MapBox for the same.
+          The Mapbox Geocoding API does two things: forward geocoding and reverse geocoding
+            Example 1: Forward geocoding converts location text into geographic coordinates, turning 2 Lincoln Memorial Circle SW into -77.050,38.889.
+            Example 2: Reverse geocoding turns geographic coordinates into place names, turning -77.050, 38.889 into 2 Lincoln Memorial Circle SW.
+      
+      b. We will implement Geocoding for the add new Listing.
+      c. We need to install mapbox/mapbox-sdk.
+          npm install @mapbox/mapbox-sdk
+      d. We need to add below to our listing controller after imports to create geocoding Client.
+          const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+          const mapToken=process.env.MAP_TOKEN;
+          const geocodingClient = mbxGeocoding({ accessToken: mapToken });
+      e. We need to modify model for listing to store coordinates in the mongoDb.
+         i. We will use GeoJSON [It is a format for storing geographic points and polygons.] for the same.
+         ii. We will add new field "geometry" in the listing model as follows
+              geometry: {
+                  type: {
+                    type: String, // Don't do `{ location: { type: String } }`
+                    enum: ['Point'], // 'location.type' must be 'Point'
+                    required: true
+                  },
+                  coordinates: {
+                    type: [Number],
+                    required: true
+                  }
+                }
+
+      f. We need to add below for createListing middleware inside our listing controller to fetch co-ordinate for the location and store them in the mongoDb .
+          let response = await geocodingClient
+              .forwardGeocode({
+                query: req.body.listing.location,
+                limit: 1,
+              })
+              .send();
+            newListing.geometry = response.body.features[0].geometry;
+
+5. Adding Map Marker to Map:
+    a. Add below line of code to access coordinates from listing inside the script tag in show.ejs.
+       const listing= <%-JSON.stringify(listing)%>;
+
+    b. Update the code for map.js file inside public/js as follows-
+        mapboxgl.accessToken =mapToken;
+        const map = new mapboxgl.Map({
+          container: "map", // container ID
+          center: listing.geometry.coordinates, // starting position [lng, lat]. Note that lat must be set between -90 and 90
+          zoom: 9, // starting zoom
+        });
+
+        const marker=new mapboxgl.Marker({color:"red"})
+        .setLngLat(listing.geometry.coordinates)
+        .addTo(map);
+
+6. Adding Map popup.
+    a. To add the popup to Map marker,we need to use method setPopup as follows-
+        .setPopup(
+            new mapboxgl.Popup({ offset: 25 }).setHTML(
+              `<h4>${listing.title}</h4><p>Exact location will be provided after booking</p>`
+            )
+          )
+    
+    b. Update the code for map.js file inside public/js as follows-
+          mapboxgl.accessToken = mapToken;
+          const map = new mapboxgl.Map({
+            container: "map", // container ID
+            center: listing.geometry.coordinates, // starting position [lng, lat]. Note that lat must be set between -90 and 90
+            zoom: 9, // starting zoom
+          });
+
+          const marker = new mapboxgl.Marker({ color: "red" })
+            .setLngLat(listing.geometry.coordinates)
+            .setPopup(
+              new mapboxgl.Popup({ offset: 25 }).setHTML(
+                `<h4>${listing.title}</h4><p>Exact location will be provided after booking</p>`
+              )
+            )
+            .addTo(map);
