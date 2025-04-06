@@ -1,0 +1,160 @@
+<div id="filters">
+  <form action="/listings" method="get">
+    <label for="all" class="filter">
+      <input
+        type="radio"
+        name="category"
+        onchange="this.form.submit()"
+        value="All"
+        id="all"
+      />
+      <div><i class="fa-solid fa-border-all"></i></div>
+      <p>All</p>
+    </label>
+    <label for="trending" class="filter">
+      <input
+        type="radio"
+        name="category"
+        onchange="this.form.submit()"
+        value="Trending"
+        id="trending"
+      />
+      <div><i class="fa-solid fa-fire"></i></div>
+      <p>Trending</p>
+    </label>
+
+    <label for="rooms" class="filter">
+      <input
+        type="radio"
+        name="category"
+        onchange="this.form.submit()"
+        value="Rooms"
+        id="rooms"
+      />
+      <div><i class="fa-solid fa-bed"></i></div>
+      <p>Rooms</p>
+    </label>
+
+    <label for="iconic cities" class="filter">
+      <input
+        type="radio"
+        name="category"
+        onchange="this.form.submit()"
+        value="Iconic Cities"
+        id="iconic cities"
+      />
+      <div><i class="fa-solid fa-mountain-city"></i></div>
+      <p>Iconic Cities</p>
+    </label>
+
+    <label for="mountains" class="filter">
+      <input
+        type="radio"
+        name="category"
+        onchange="this.form.submit()"
+        value="Mountains"
+        id="mountains"
+      />
+      <div><i class="fa-solid fa-mountain"></i></div>
+      <p>Mountains</p>
+    </label>
+
+    <label for="castles" class="filter">
+      <input
+        type="radio"
+        name="category"
+        onchange="this.form.submit()"
+        value="Castles"
+        id="castles"
+      />
+      <div><i class="fa-solid fa-chess-rook"></i></div>
+      <p>Castles</p>
+    </label>
+
+    <label for="camping" class="filter">
+      <input
+        type="radio"
+        name="category"
+        onchange="this.form.submit()"
+        value="Camping"
+        id="camping"
+      />
+      <div><i class="fa-solid fa-tents"></i></div>
+      <p>Camping</p>
+    </label>
+
+    <label for="farms" class="filter">
+      <input
+        type="radio"
+        name="category"
+        onchange="this.form.submit()"
+        value="Farms"
+        id="farms"
+      />
+      <div><i class="fa-solid fa-cow"></i></div>
+      <p>Farms</p>
+    </label>
+
+    <label for="amazing pools" class="filter">
+      <input
+        type="radio"
+        name="category"
+        onchange="this.form.submit()"
+        value="Amazing Pools"
+        id="amazing pools"
+      />
+      <div><i class="fa-solid fa-person-swimming"></i></div>
+      <p>Amazing Pools</p>
+    </label>
+
+    <label for="arctic" class="filter">
+      <input
+        type="radio"
+        name="category"
+        onchange="this.form.submit()"
+        value="Arctic"
+        id="arctic"
+      />
+      <div><i class="fa-solid fa-snowflake"></i></div>
+      <p>Arctic</p>
+    </label>
+
+    <label for="boats" class="filter">
+      <input
+        type="radio"
+        name="category"
+        onchange="this.form.submit()"
+        value="Boats"
+        id="boats"
+      />
+      <div><i class="fa-solid fa-sailboat"></i></div>
+      <p>Boats</p>
+    </label>
+
+    <label for="beaches" class="filter">
+      <input
+        type="radio"
+        name="category"
+        onchange="this.form.submit()"
+        value="Beaches"
+        id="beaches"
+      />
+      <div><i class="fa-solid fa-umbrella-beach"></i></div>
+      <p>Beaches</p>
+    </label>
+  </form>
+  
+  <div class="tax-toggle">
+    <div class="form-check-reverse form-switch">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        id="flexSwitchCheckDefault"
+      />
+      <label class="form-check-label" for="flexSwitchCheckDefault"
+        >Display total after taxes</label
+      >
+    </div>
+  </div>
+</div>

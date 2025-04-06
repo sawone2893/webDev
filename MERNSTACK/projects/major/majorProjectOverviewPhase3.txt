@@ -293,3 +293,236 @@
               )
             )
             .addTo(map);
+
+:::::::::::::::::::::::::::::::::::::::: Major Project Phase 3 Part C Fixing Home,Add UI for Filter,Tax Switch and Search ::::::::::::::::::::::::::::::::::::::::
+1. Fixing Home Page:Index.js
+    a. Modify the Navigation bar with below changes.
+        i. Remove Home link.
+        ii. Replace "All "listing" with "Explore"
+        iii. Replace "Add new Listing" with "Airnb your home" and move it to right side.
+        iv. Make Signup, Login and Logout text: bold
+        v. Change routing for icon to "/listings"
+        vi. Remove the route: "/" from app.js
+ 
+ 2. Add UI Filters: 
+    a. Need to add filters at index.js in place of "All Listing". We will add below filters -
+        <div id="filters">
+          <div class="filter">
+            <div><i class="fa-solid fa-fire"></i></div>
+            <p>Trending</p>
+          </div>
+          <div class="filter">
+            <div><i class="fa-solid fa-bed"></i></div>
+            <p>Rooms</p>
+          </div>
+          <div class="filter">
+            <div><i class="fa-solid fa-mountain-city"></i></div>
+            <p>Iconic Cities</p>
+          </div>
+          <div class="filter">
+            <div><i class="fa-solid fa-mountain"></i></div>
+            <p>Mountains</p>
+          </div>
+          <div class="filter">
+            <div><i class="fa-solid fa-chess-rook"></i></div>
+            <p>Castles</p>
+          </div>
+          <div class="filter">
+            <div><i class="fa-solid fa-tents"></i></div>
+            <p>Camping</p>
+          </div>
+          <div class="filter">
+            <div><i class="fa-solid fa-cow"></i></div>
+            <p>Farms</p>
+          </div>
+          <div class="filter">
+            <div><i class="fa-solid fa-person-swimming"></i></div>
+            <p>Amazing Pools</p>
+          </div>
+          <div class="filter">
+            <div><i class="fa-solid fa-snowflake"></i></div>
+            <p>Arctic</p>
+          </div>
+          <div class="filter">
+              <div><i class="fa-solid fa-sailboat"></i></div>
+              <p>Boats</p>
+            </div>
+            <div class="filter">
+              <div><i class="fa-solid fa-igloo"></i></div>
+              <p>Domes</p>
+            </div>
+</div>
+    b. Add style as below for filters:
+        #filters {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+          }
+          .filter {
+            text-align: center;
+            margin-right: 1rem;
+            margin-top: 2rem;
+            opacity: 0.7;
+          }
+          .filter:hover {
+            opacity: 1;
+            cursor: pointer;
+          }
+          .filter p {
+            font-size: 0.8rem;
+          }
+
+
+3. Add UI Tax Switch: 
+    a. Added below Tax Switch inside div with id=filters at the end.
+        <div class="tax-toggle">
+            <div class="form-check-reverse form-switch">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="flexSwitchCheckDefault"
+              />
+              <label class="form-check-label" for="flexSwitchCheckDefault"
+                >Display total after tax</label
+              >
+            </div>
+        </div>
+    b. Adding functionality to tax Switch
+        i.We need to add tax percent inside listing pricing as below:
+            <i class="tax-info">&nbsp; &nbsp; + 18% GST</i> 
+        ii. Add style as below at the initials:
+            .tax-info{
+              display: none;
+            }
+        iii. We will add a click event on toggling of switch at index.ejs as follows.
+              <script>
+                let taxSwtich = document.getElementById("flexSwitchCheckDefault");
+                taxSwtich.addEventListener("click", () => {
+                  let taxInfo=document.getElementsByClassName("tax-info");
+                  for(let info of taxInfo){
+                    if(info.style.display!="inline"){
+                      info.style.display="inline";
+                    }else{
+                      info.style.display="none";
+                    }
+                  }
+                });
+              </script>
+        iv.Add styling to tax switch as below:
+            .tax-toggle {
+                border: 1px solid black;
+                border-radius: 1rem;
+                height: 3.25rem;
+                padding: 1rem;
+                margin-left: 3rem;
+                display: flex;
+                align-items: center;
+              }
+
+4. Make UI Filters functional:
+    a. Create include "filters.ejs".Move the filter UI code to this file from "index.ejs".Add below code in place of remove code.
+        <%- include("../includes/filters.ejs") %>
+    b. Add GET form with action attribute values as "/listings"and keep filters inside it in filters.ejs.
+    c. Make for attribute value of label and id of input same for each filter.
+    d. Add value attribute value equal to category name.
+    e. Add name="category" and onchange="this.form.submit()" for every input of each filter.
+    f. Move filter style to style.css file from "index.ejs" style tag.
+    g. Add field name "category" in the listing model as below with some predefined category names.
+            category: {
+                type: String,
+                enum: [
+                  "Trending",
+                  "Rooms",
+                  "Iconic Cities",
+                  "Mountains",
+                  "Castles",
+                  "Camping",
+                  "Farms",
+                  "Amazing Pools",
+                  "Arctic",
+                  "Boats",
+                  "Domes",
+                  "Beaches",
+                ],
+                required: true
+            }
+    h. Add the category data in the  the "data.js" for all listing.
+    i. Re-insert the listing data into mongoDb by executing "index.js" file from init folder.
+    j. Update the code for middleware: "index" inside the "listing" Controller as below.
+          let category=req.query.category;
+            let allListings;
+            if(category==="All"||category===undefined){
+              allListings = await Listing.find({});
+            }else{
+              allListings = await Listing.find({category:category});
+              if (!allListings.length>0) {
+                req.flash("error", `Listing for category: ${category} does not exist!`);
+                res.redirect("/listings");
+              }
+            }
+          res.render("listings/index.ejs", { allListings });
+      k. Add bootstrap dropdown: "category" to New form [ new.js] and Edit Form[edit.ejs].
+      l. Display category in Show Form [show.ejs].
+          <h4>Category: <%= listing.category %></h4>
+
+5. Create a utility for getting geometry based on location.
+      a. Create "coordinateGenerator.js" inside public/js folder.
+      b. Move the code for generating location coordinates from listing Controller.
+      c. Create function called "getGeometry" inside "coordinateGenerator.js".
+      d. Import the "getGeometry" to listingController using below code.
+          const { getGeometry } = require("../public/js/coordinateGenerator");
+      e. Update middleware: createListing for adding geometry to new listing.
+            newListing.geometry = await getGeometry(req.body.listing.location);
+      f. Update middleware: updateListing for adding geometry to existing listing after any edit operation.
+
+6. Add UI for Search and Make it functional:
+      a. Add bootstrap search commponent to your navbar [navbar.js]
+            <div class="navbar-nav ms-auto">
+                    <form class="d-flex" role="search" method="get" action="/listings">
+                      <input
+                        class="form-control me-2 search-inp"
+                        type="search"
+                        name="destination"
+                        placeholder="Search Destination"
+                      />
+                      <button class="btn search-btn" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>Search
+                      </button>
+                    </form>
+            </div>
+
+      b. Add custom style to your search commponent.
+            /** NavBar Search **/
+            .search-btn {
+                background-color: #fe424d;
+                color: #fff;
+                border-radius: 25px;
+                padding: 0 1rem 0 1rem;
+            }
+
+            .search-btn:hover {
+                background-color: #fe424d;
+                color: #fff;
+            }
+
+            .search-btn i {
+                display: inline;
+                margin-right: .5rem;
+            }
+
+            .search-inp {
+                border-radius: 25px;
+                padding: 0.5rem 3rem 0.5rem 3rem;
+                font-size: 1rem;
+            }
+            
+      c. Add the code below for middleware: "index" inside the "listing" Controller to handle search based on destination.
+            let destination = req.query.destination;
+              if (destination) {
+                allListings = await Listing.find({ country: destination });
+                if (!allListings.length > 0) {
+                  req.flash("error", `Listing for destination: ${destination} does not exist!`);
+                  //res.redirect("/listings");
+                }
+              }

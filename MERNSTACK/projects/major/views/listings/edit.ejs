@@ -34,13 +34,14 @@
         <div class="invalid-feedback">Please enter short description</div>
       </div>
       <div class="mb-3">
-        Original Listing Image <br>
+        Original Listing Image <br />
         <img src="<%= originalImageUrl %>" alt="listingImage" />
       </div>
       <div class="mb-3">
         <label for="image" class="form-label">Upload New Listing Image</label>
         <input type="file" name="listing[image]" class="form-control" />
       </div>
+
       <div class="row">
         <div class="mb-3 col-md-4">
           <label for="price" class="form-label">Price</label>
@@ -53,7 +54,31 @@
           />
           <div class="invalid-feedback">Please enter valid price</div>
         </div>
+
         <div class="mb-3 col-md-8">
+          <label for="category" class="form-label">Category</label>
+          <select class="form-control" name="listing[category]" required>
+            <option selected value="<%= listing.category %>"><%= listing.category %></option>
+            <option value="Trending">Trending</option>
+            <option value="Rooms">Rooms</option>
+            <option value="Iconic Cities">Iconic Cities</option>
+            <option value="Mountains">Mountains</option>
+            <option value="Castles">Castles</option>
+            <option value="Camping">Camping</option>
+            <option value="Farms">Farms</option>
+            <option value="Amazing Pools">Amazing Pools</option>
+            <option value="Arctic">Arctic</option>
+            <option value="Boats">Boats</option>
+            <option value="Domes">Domes</option>
+          </select>
+          <div class="invalid-feedback">
+            Please select category for your Listing
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="mb-3 col-md-6">
           <label for="location" class="form-label">Location</label>
           <input
             type="text"
@@ -64,19 +89,20 @@
           />
           <div class="invalid-feedback">Please enter location</div>
         </div>
+
+        <div class="mb-3 col-md-6">
+          <label for="country" class="form-label">Country</label>
+          <input
+            type="text"
+            name="listing[country]"
+            value="<%= listing.country %>"
+            class="form-control"
+            required
+          />
+          <div class="invalid-feedback">Please enter country</div>
+        </div>
       </div>
 
-      <div class="mb-3">
-        <label for="country" class="form-label">Country</label>
-        <input
-          type="text"
-          name="listing[country]"
-          value="<%= listing.country %>"
-          class="form-control"
-          required
-        />
-        <div class="invalid-feedback">Please enter country</div>
-      </div>
       <button class="btn btn-dark update-btn mt-3">Update</button>
     </form>
   </div>

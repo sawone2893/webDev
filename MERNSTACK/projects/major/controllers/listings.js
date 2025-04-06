@@ -1,10 +1,26 @@
 const Listing = require("../models/listings");
-const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
-const mapToken = process.env.MAP_TOKEN;
-const geocodingClient = mbxGeocoding({ accessToken: mapToken });
+const { getGeometry } = require("../public/js/coordinateGenerator");
 
 module.exports.index = async (req, res) => {
-  let allListings = await Listing.find({});
+  let category = req.query.category;
+  let allListings;
+  if (category === "All" || category === undefined) {
+    allListings = await Listing.find({});
+  } else {
+    allListings = await Listing.find({ category: category });
+    if (!allListings.length > 0) {
+      req.flash("error", `Listing for category: ${category} does not exist!`);
+      //res.redirect("/listings");
+    }
+  }
+  let destination = req.query.destination;
+  if (destination) {
+    allListings = await Listing.find({ country: destination });
+    if (!allListings.length > 0) {
+      req.flash("error", `Listing for destination: ${destination} does not exist!`);
+      //res.redirect("/listings");
+    }
+  }
   res.render("listings/index.ejs", { allListings });
 };
 
@@ -25,19 +41,12 @@ module.exports.showListing = async (req, res) => {
 };
 
 module.exports.createListing = async (req, res, next) => {
-  let response = await geocodingClient
-    .forwardGeocode({
-      query: req.body.listing.location,
-      limit: 1,
-    })
-    .send();
-
   let url = req.file.path;
   let filename = req.file.filename;
   const newListing = new Listing(req.body.listing);
   newListing.image = { url, filename };
   newListing.owner = req.user._id;
-  newListing.geometry = response.body.features[0].geometry;
+  newListing.geometry = await getGeometry(req.body.listing.location);
   await newListing.save();
   req.flash("success", "New Lisiting created!");
   res.redirect("/listings");
@@ -62,8 +71,9 @@ module.exports.updateListing = async (req, res) => {
     let url = req.file.path;
     let filename = req.file.filename;
     listing.image = { url, filename };
-    listing.save();
   }
+  listing.geometry = await getGeometry(listing.location);
+  listing.save();
   req.flash("success", "Updated Lisiting!");
   res.redirect(`/listings/${id}`);
 };
