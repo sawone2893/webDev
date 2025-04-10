@@ -594,7 +594,7 @@
     e.Now copy your wanderlust web app code into this folder.
     f.Commit and push the code to the repo.
 
-5. Connect Render with GitHub
+5. Connect Render with GitHub and Create Service:
     a. Log into Renderc Platform
     b. Click on New Web Service option from dashboard.
     c. Select GitHub inside the configure tab.
