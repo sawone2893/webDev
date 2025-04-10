@@ -526,3 +526,102 @@
                   //res.redirect("/listings");
                 }
               }
+
+:::::::::::::::::::::::::::::::::::::::: Major Project Phase 3 Part D Mongo Atlas,Mongo Session Store,Deployment with render,Move code to GitHub, Connect Render with GitHub , and Create a Service ::::::::::::::::::::::::::::::::::::::::
+1. Mongo Atlas: 
+    a. Create your account using Gmail Account at https://www.mongodb.com/atlas and follow the steps as suggested on the portal.
+    b. Register mail id: shabryn2893@gmail.com
+    c. Once you follow all steps then you have  cloud database your url: mongodb+srv://shabryn2893:<db_password>@cluster0.okjjj4q.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+    d. Add your IP address in the Atlas DB Platform.
+    e. Add this cloud db url to your .env file with key named ATLAS_DB_URL.
+    f. Update your db_password in the above ATLAS_DB_URL.
+    g. Replace local mongoDb url with ATLAS_DB_URL in app.js file as below.
+        const MONGODB_URL = process.env.ATLAS_DB_URL;
+
+2. Mongo Session Store:
+    a. We will be use using connect-mongo[A MongoDB-based session store.] for storing session information as previously it was getting stored in the local.
+    b. We are using "connect-mongo" to store session information in Atlas DB.
+    c. We need to insatll library using below command:
+        npm i connect-mongo 
+    d. Once it is install, we need to create mongo store which will be pass in the session options.
+    e. Import the mongo store as below after session-express.
+        const session = require("express-session");
+        const MongoStore = require("connect-mongo");
+    e. We can create mongo store as follows:-
+        const mongoStore = MongoStore.create({
+          mongoUrl: MONGODB_URL,
+          crypto: {
+            secret: process.env.SECRET,
+          },
+          touchAfter: 24 * 60 * 60,
+        });
+    f. Now add this mongo store to session options as below.
+        //Setting session options
+        const sessionOptions = {
+          store: mongoStore,
+         secret: process.env.SECRET,
+          resave: false,
+          saveUninitialized: true,
+          cookies: {
+            expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+            maxAge: Date.now() + 7 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+          },
+        };
+    g. We need to handle the error also if occured while creating session.
+        mongoStore.on("error", () => {
+            console.log("ERROR IN MONGO SESSION STORE",err);
+        });
+    h.Session info will be expired after 14 days as this is the default value to expired in cookies.
+
+3. Deployment with render:
+    a. There are multiple Platform for deploying our project.For example render,netlify,cyclic etc...
+    b. We will be using Render Platform[https://dashboard.render.com/].
+    c. We need to create a account on Render Platform.We are siging up with our GitHub account[shabryn2893@gmail.com] here.
+    d. Add the engine in the package.json at top.
+        "engines": {
+            "node": "20.17.0"
+        },
+
+4. Moving Project to GitHub:
+    a. Create a private repo in GitHub with name "wanderlust".
+    b. Before moving code to GitHub, move secret in the .env file.
+    c. We need to add .env, node_module in gitignore file.
+    d. Create a folder in your to take clone of the repo:"wanderlust".
+    d. Clone the repository
+        git clone https://github.com/shabryn2893/wanderlust.git
+    
+    e.Now copy your wanderlust web app code into this folder.
+    f.Commit and push the code to the repo.
+
+5. Connect Render with GitHub
+    a. Log into Renderc Platform
+    b. Click on New Web Service option from dashboard.
+    c. Select GitHub inside the configure tab.
+    d. Login to GitHub
+    e. To install Render, Select option: Only select repository
+    f. select your repo name: "shabryn2893/wanderlust" from the dropdown.
+    g. Click on the Install button.
+    h. if not login, please login.
+    i. Give name your web service:wanderlust
+    j. Select language as"Node".
+    k. Select branch name as "main".
+    l. Let the region be default.
+    m. Type Build command as "npm install".
+    n. Type Start command as "node app.js"
+    o. Select the instance type as "For hobby projects"
+    p. Add the environment variables from the .env file like CLOUD_NAME,CLOUD_API_KEY,CLOUD_API_SECRET,MAP_TOKEN,ATLAS_DB_URL,SECRET
+    q. Click on deploy web service.
+    r. Deployment will fail due to "MongoServerSelectionError" as we have not whitelisted the IP address 
+       and currently we have add our local IP in the Atlas DB.
+       We need to update the render IP address there.
+    s. Click on the Logs,In log you will find reason for failure.
+    t. Click on the Connect button to get the Static Outbound IP Addresses.
+        100.20.92.101
+        44.225.181.72
+        44.227.217.144
+    u. Now we need to whitelisted above IP address in Atlas DB Platform.Then log into Atlas DB Platform.
+    v. Click on the Network Access under Security
+    w. Click on ADD IP ADDRESSS button and add all the ip addresses mentioned above.
+    x. Again try to deploy web service on Render.
+    y. Access this web app at "https://wanderlust-r2n0.onrender.com".

@@ -1,6 +1,5 @@
-
-if(process.env.NODE_ENV!="production"){
-  require('dotenv').config();
+if (process.env.NODE_ENV != "production") {
+  require("dotenv").config();
 }
 
 const express = require("express");
@@ -13,13 +12,15 @@ const ExpressError = require("./utils/ExpressError");
 const listingsRouter = require("./routes/listing");
 const reviewsRouter = require("./routes/review");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 const usersRouter = require("./routes/user");
 
-const MONGODB_URL = "mongodb://127.0.0.1:27017/wanderlust";
+//const MONGODB_URL = "mongodb://127.0.0.1:27017/wanderlust";
+const MONGODB_URL = process.env.ATLAS_DB_URL; //Now pointing to Cloud database: ATLAS_DB
 
 main()
   .then(() => {
@@ -48,9 +49,23 @@ app.engine("ejs", ejsMate);
 //This is to service static file like css and js
 app.use(express.static(path.join(__dirname, "/public")));
 
+//Creating mongo store for storing session info in Atlas DB.
+const mongoStore = MongoStore.create({
+  mongoUrl: MONGODB_URL,
+  crypto: {
+    secret: process.env.SECRET,
+  },
+  touchAfter: 24 * 60 * 60,
+});
+
+mongoStore.on("error", () => {
+  console.log("ERROR IN MONGO SESSION STORE",err);
+});
+
 //Setting session options
 const sessionOptions = {
-  secret: "mysupersecretcode",
+  store: mongoStore,
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   cookies: {
@@ -75,7 +90,7 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
-  res.locals.currUser=req.user;
+  res.locals.currUser = req.user;
   next();
 });
 
