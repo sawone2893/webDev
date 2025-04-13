@@ -1,0 +1,120 @@
+1. React Props: Props are the information which we pass in the JSX tag.
+        Example:In the below example title and description are the Props
+
+        export default function Product({title,description}){
+            return (
+                <div className="Product:>
+                <h1>{title}</h1>
+                <p> {description}<p>
+                </div>
+            );
+        }
+
+        <Procuct title="Indian Cinema" description="Bollwood is the most important part of the Indian Cinema"/>
+
+2. Passing Arrays or Object to Props.
+    Example1:Passing Arrays
+
+            export default function Product({title,description,feature}){
+                    return (
+                        <div className="Product:>
+                        <h1>{title}</h1>
+                        <p> {description}<p>
+                        <p> {feature}<p>
+                        </div>
+                    );
+                }
+
+            export default function ProductTab() {
+                let featureArray=["Durable","Fast"];
+            return (
+                <div className="ProductName">
+                <Product title="Phone" price={10000} feature={featureArray}/>
+                <Product title="Laptop" price={80000} feature={featureArray}/>
+                <Product title="Pen" price={10} feature={featureArray}/>
+                </div>
+            );
+            }
+    Example2: Passing Object
+        export default function ProductTab() {
+                let featureObj={a:"Durable",b:"Fast"};
+            return (
+                <div className="ProductName">
+                <Product title="Phone" price={10000} feature={featureObj}/>
+                <Product title="Laptop" price={80000} feature={featureObj}/>
+                <Product title="Pen" price={10} feature={featureObj}/>
+                </div>
+            );
+            }
+    Example3: Passing Array directly
+        export default function ProductTab() {
+            return (
+                <div className="ProductName">
+                <Product title="Phone" price={10000} feature={["Durable","Fast"]}/>
+                <Product title="Laptop" price={80000} feature={["Durable","Fast"]}/>
+                <Product title="Pen" price={10} feature={["Durable","Fast"]}/>
+                </div>
+            );
+            }
+    Example4: Passing Object directly
+        export default function ProductTab() {
+            return (
+                <div className="ProductName">
+                <Product title="Phone" price={10000} feature={{a:"Durable",b:"Fast"}}/>
+                <Product title="Laptop" price={80000} feature={{a:"Durable",b:"Fast"}}/>
+                <Product title="Pen" price={10} feature={{a:"Durable",b:"Fast"}}/>
+                </div>
+            );
+            }
+
+3. Rendering Array:
+    Example:
+        export default function Product({title,description,features}){
+                    return (
+                        <div className="Product:>
+                        <h1>{title}</h1>
+                        <p> {description}<p>
+                        <p> {features.map((feature)=><li>{feature}</li>)}<p>
+                        </div>
+                    );
+                }
+
+4. Conditionals:Adding elements on the basis of conditions.
+    Example1:Using ternary operator
+        export default function Product({title,description,features}){
+                    return (
+                        <div className="Product:>
+                        <h1>{title}</h1>
+                        <p> {description}<p>
+                        <p> {features.map((feature)=><li>{feature}</li>)}<p>
+                        {price>=3000?<p>Discount of 5%</p>:null}
+                        </div>
+                    );
+                }
+    Example2: Using And Operator
+        export default function Product({title,description,features}){
+                    return (
+                        <div className="Product:>
+                        <h1>{title}</h1>
+                        <p> {description}<p>
+                        <p> {features.map((feature)=><li>{feature}</li>)}<p>
+                        {price>30000 && <p>Discount of 5%</p>}
+                        </div>
+                    );
+                }
+
+5. Dynamic Styling for component:
+    Example:
+
+        export default function Product({title,description,features}){
+            let isDiscount=price>30000;
+            let style={backgroundColor:isDiscount? "yellow": ""};
+                    return (
+                        <div className="Product: style={style}>
+                        <h1>{title}</h1>
+                        <p> {description}<p>
+                        <p> {features.map((feature)=><li>{feature}</li>)}<p>
+                        {price>30000 && <p>Discount of 5%</p>}
+                        </div>
+                    );
+                }
