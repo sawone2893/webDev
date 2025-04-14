@@ -1,0 +1,76 @@
+Terminal: Basic Commands
+------------------------
+1. ls - to show files in the current directory.
+2. pwd - print the current working directory.
+3. clear - to erase screen.
+4. upward arrow - to access old Commands.
+5. downward arrow - to access new Commands.
+-------------------
+Navigation Commands:
+-------------------
+6. cd - to get into the any directory.
+    syntax: cd <directory name> - get into single directory
+            Example: cd desktop
+            cd <path of the target directory> - get into the nested directories
+             Example: cd desktop/doc
+7. cd.. - to get out of the current directory.
+8. cd../.. - to get out of the current directory and parent directory.
+---------------
+Make directory
+---------------
+9. mkdir - to make new directory.
+            Syntax: mkdir <directoryName or directory path>
+            Example mkdir shab
+                    mkdir raj/doc/images
+---------------
+Command Manual:
+---------------
+10. man - (Manual Command)to any infomation of any command.Press q to go out of the manaul window of the command.
+            Example man ls - give information about the ls command.
+---------------
+Create a new File:
+---------------
+11. touch - to create new file inside any directory with any extension
+            Syntax: touch <fileNme.extension>
+            Example: touch demo.txt
+                     touch resume.pdf
+------------------------------
+Deleting files and directories:
+------------------------------
+12. rm - remove files.
+        Syntax: rm <fileName> - delete single file
+                rm <fileName1> <fileName2> <fileName3> <fileName4> - delete multiple files
+13. rmdir -  remove empty folders.
+        Syntax: rmdir <folder> - delete single empty folder
+14. rm -rf - remove any folder.
+        Syntax: rm -rf <folder> - delete entire folder forcesfully.
+
+------------------
+Path in Navigation:
+------------------
+Absolute Path: start from root directory.To get into the any directory using it's absolute path, it start with / and followed by folder path.
+Example:
+root directory: users
+current directly desktop
+target directory: shab
+Commands: cd /user/desktop/doc/shab
+
+Relative Path: star from any middle directory.To get into the any directory using it's relative path, it directly start with folder path.
+Example:
+root directory: users
+current directly desktop
+target directory: shab
+Commands: cd doc/shab
+
+NOTE:-------------------------------
+/ represent the root directory.
+~ represent the home directory.
+-------------------------------------
+
+Flags: These are charcters which are pass with command to change their behaviour.
+        Example l - long format of the file.
+                a - files which start with .
+                ------------------------------------
+                ls -l:this will list the file names in the long format
+                ls -a: this will list the normal file as well as files start with .
+                ls -la:this will file names in the long format and the normal file as well as files start with .

@@ -1,0 +1,217 @@
+Where clause: to define codition
+              Syntax: SELECT <columnName1>,<columnName2>... FROM <tableName>
+                      WHERE <conditions>;
+              Example1: SELECT * FROM user
+                       WHERE age>=13;
+
+            Example2: SELECT id,name,followers FROM user
+                       WHERE followers>=200;
+-------------------------------------------------------------------
+Operators in Where clause:
+1. Arithmetic Operators - 
+                        addition(+), 
+                        subtraction(-), 
+                        multiplication(*), 
+                        division(/), 
+                        modulus(%)
+
+2. Comparision Operators - 
+                        equal to(=), 
+                        not equal to(!=), 
+                        greater than (>), 
+                        greater than equal to (>=), 
+                        less than(<), 
+                        less than equal to (<=)
+
+3. Logical Operators - 
+                       AND,
+                       OR,
+                       NOT,
+                       IN,
+                       BETWEEN,
+                       ALL,
+                       LIKE,
+                       ANY
+
+4. Bitwise Operators - 
+                       Bitwise AND(&),
+                       Bitwise OR(|)
+----------------------------------------------------------------------------------------------------
+Frequently used Logical Operators:
+1. AND - to check both condtions are true
+         Example: SELECT * FROM user
+                  WHERE age>13 AND followers>200;
+
+2. OR - to check any one of the conditions is true.
+        Example: SELECT * FROM user
+                 WHERE age>13 OR followers>200;
+
+3. BETWEEN - Selects for the given range.
+             Example: SELECT * FROM user
+                      WHERE age BETWEEN(13,15);
+
+4. IN - Matches any values in the list.
+        Example: SELECT * FROM user
+                 WHERE age IN (13,15);
+
+5. NOT - to negate the given condtions.
+         Example: SELECT * FROM user
+         WHERE age NOT IN (13,15);
+
+-----------------------------------------------------------------------------------------------
+Limit clause: It is used to set upper limit to the number of row to be returned
+              Syntax: SELECT <columnName1>,<columnName2>... FROM <tableName>
+                      LIMIT <number>;
+                                    or
+                      SELECT <columnName1>,<columnName2>... FROM <tableName>
+                      WHERE <conditions>
+                      LIMIT <number>;
+              
+              Example1: SELECT id,name FROM user
+                        LIMIT 5;
+                               or
+                        SELECT id, name,email FROM user
+                        WHERE age>=13
+                        LIMIT 4;
+
+-----------------------------------------------------------------------------------------------
+Order By clause: To sort in Ascending(ASC) or descending(DESC) order.
+                
+                Syntax: SELECT <columnName1>,<columnName2>... FROM <tableName>
+                         ORDER BY <columnNames> ASC;
+                
+                Example1: SELECT id,name FROM user
+                          ORDER BY name ASC;
+                
+                Example2: SELECT id,name FROM user
+                          ORDER BY name DESC;
+
+---------------------------------------------------------------------------------------------------
+Aggregate Function: These are function which perform calculation on column and returns single value.
+                Below are some function names.
+                1. count
+                   Example: SELECT count(age) FROM user
+                            WHERE age=14;
+                2. min
+                   Example: SELECT min(age) FROM user;
+
+                3. max
+                   Example: SELECT max(age) FROM user;
+
+                4. avg
+                   Example: SELECT avg(age) FROM user;
+
+                5. sum
+                   Example: SELECT sum(followers) FROM user;
+
+---------------------------------------------------------------------------------------------------
+Group By clause: It is used when we want to group some data based on some columns.
+                 This is generally used with Aggregate function.
+                 Syntax: SELECT <columnNames> <aggregateFunction(<columnName>)>
+                         FROM <tableName>
+                         GROUP BY <columnNames>;
+                 Example: SELECT age,count(id)
+                          FROM user
+                          GROUP BY age;
+
+Note: 
+        Only those columnNames can be given in the select query by which it is group by.
+
+---------------------------------------------------------------------------------------------------
+Having clause: It is used to apply condition on groups.
+               It should be used with Group by clause.
+               Syntax: SELECT <columnNames> <aggregateFunction(<columnName>)>
+                       FROM <tableName>
+                       GROUP BY <columnNames>
+                       Having <conditions>;
+
+               Example: SELECT age,max(followers)
+                        FROM user
+                        GROUP BY age
+                        Having max(followers)>200;
+Note:
+        WHERE is for the table, Having is for a group
+        Grouping is necessary for Having.
+
+---------------------------------------------------------------------------------------------------
+General Order for the clauses:
+        Syntax: SELECT <columnNames>
+                FROM <tableName>
+                WHERE <condtions>
+                GROUP BY columns
+                Having condition
+                ORDER BY column ASC;
+
+        Example: SELECT age,max(followers)
+                 FROM user
+                 GROUP BY age
+                 Having max(followers)>200
+                 ORDER BY age ASC;
+
+---------------------------------------------------------------------------------------------------
+
+Table Queries:
+4. UPDATE: To update table for existing records
+        Syntax: UPDATE <tableName>
+                SET <columnName=colValue>
+                WHERE <condition>
+        
+        Example: UPDATE user
+                 SET followers=600
+                 WHERE age=16;
+
+Note:
+        You might not be able to update in the My sql for the first time so, you need to run below query to enable update.
+        SET SQL_SAFE_UPDATES=0;
+
+5. DELETE: To delete existing rows from table.
+        Syntax: DELETE FROM <table>
+                WHERE <condtions>;
+        
+        Example: DELETE FROM user
+                 WHERE age=14;
+
+Note:
+        It is advisable to use where clause with the delete;
+
+6. ALTER: To change in the Table Schema
+        a. Add a new column
+                Syntax: ALTER TABLE <tableName>
+                        ADD COLUMN <new_column_name datatype constraint>;
+                
+                Example: ALTER TABLE user
+                         ADD COLUMN city VARHAR(30) DEFALUT "DELHI";
+
+        b. Drop a column
+                Syntax: ALTER TABLE <tableName>
+                        DROP COLUMN <columnName>;
+                
+                Example: ALTER TABLE user
+                         DROP COLUMN city;
+        
+        c. Rename a table
+                Syntax: ALTER TABLE <tableName>
+                        RENAME TO <new_table_name>;
+                
+                Example: ALTER TABLE user
+                         RENAME TO instauser;
+        
+        d. To rename a columnName
+                Synatx: ALTER TABLE <tableName>
+                        CHANGE COLUMN <old_column_Name> <new_column_name> <new_datatype> <new_constraint>;
+                
+                Eample: ALTER TABLE user
+                        CHANGE COLUMN followers subscribers INT DEFALUT 0;
+
+        e. To modify column datatype/constraint
+                Syntax: ALTER TABLE user
+                        MODIFY <columnName> <new_datatype> <new_constraint>;
+                
+                Example: ALTER TABLE user
+                         MODIFY subscribers INT DEFALUT 200;
+
+7. TRUNCATE: To delete table data
+        Syntax: TRUNATE TABLE <tableName>;
+        
+        Example: TRUNCATE TABLE user;
+---------------------------------------------------------------------------------------------------

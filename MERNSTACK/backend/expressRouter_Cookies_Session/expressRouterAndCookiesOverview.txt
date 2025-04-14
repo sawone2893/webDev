@@ -1,0 +1,46 @@
+Express Router:
+    It is way to organise our express application such that out primary app.js file doesn't become bloated.
+    It help in structure our framework.
+    Syntax:To create new Router object
+        const router=express.Router();
+
+Web Cookies:
+    Cookies are chunk of data which are send by server to client where it get stored.
+    Cookies are used in session management,personalisation, tracking ect...
+
+How to send cookies?
+Syntax:
+    app.get("/getCookies",(req,res)=>{
+    res.cookie("greet","Namaste");
+    res.cookie("madeIn","India");
+    res.send("We sent you cookies");
+    });
+
+Cookie Parser:
+    It is used to parse the cookies send in the request.
+    Syntax:
+        const cookieParser=require("cookie-parser");
+        app.use(cookieParser());
+        //Parsing the cookies.
+        app.get("/getCookies", (req, res) => {
+        console.log(req.cookies)
+        let {name="anonymous"}=req.cookies;
+        res.send(`Hi,${name}`);
+        });
+
+Signed Cookies:
+        const cookieParser=require("cookie-parser");
+        app.use(cookieParser("secretcode));
+
+        //Sending cookies
+        app.get("/setSignedCookies",(req,res)=>{
+        res.cookie("greet","Namaste",{signed:true});
+        res.send("We sent you cookies");
+        });
+
+        //Parsing the signed cookies.
+        app.get("/getSignedCookies", (req, res) => {
+        console.log(req.signedCookies)
+        let {name="anonymous"}=req.signedCookies;
+        res.send(`Hi,${name}`);
+        });

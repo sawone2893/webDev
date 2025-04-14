@@ -1,0 +1,101 @@
+Question 1: 
+    a. Create a database for your college
+    b. Create a table named Teacher  to store(id,name,subject,salary)
+    c. Insert the following data in the table.
+        (23,"Ajay","math",50000),
+        (47,"Bharat","english",60000),
+        (18,"Chetan","chemistry",45000),
+        (9,"Divya","physics",75000);
+    d. Select the teacher whose salary is more than 55K
+    e. Rename the salary column  of the teacher table to characters
+    f. Update the salary  of all teachers by giving  then  an incremen of 25%.
+    g. Add new column  for the teacher  called city.The default city should be "Gurgoan".
+    h. Delete the salary column  for teacher table.
+
+Solution:
+    a. CREATE DATABASE IF NOT EXIST college;
+        USE DATABASE college;
+    b. CREATE TABLE teacher(
+            id INT NOT NULL,
+            name VARHAR(30),
+            ubject VARHAR(40),
+            salary INT
+        );
+
+    c. INSERT INTO teacher VALUES
+        (23,"Ajay","math",50000),
+        (47,"Bharat","english",60000),
+        (18,"Chetan","chemistry",45000),
+        (9,"Divya","physics",75000);
+
+    d. SELECT * from teacher
+        WHERE salary>55000;
+    
+    e. ALTER TABLE teacher
+        CHANGE COLUMN salary ctc INT;
+    
+    f. Update teacher
+        SET ctc=ctc+(ctc*0.25);
+    
+    g. ALTER TABLE teacher 
+        ADD COLUMN city VARCHAR(30) DEFALUT "Gurgoan";
+    
+    h. ALTER TABLE teacher
+        DROP COLUMN ctc;
+========================================================================================================
+Question 2: 
+    a. Create a table to store student info(roll_No,name,city,marks)
+    b. Insert the fllowing data in the table
+        (110, "adam","Delhi",76),
+        (108,"bob","Mumbai",65),
+        (124,"casey","Pune",94),
+        (112,"duke","Punew",80)
+    
+    c.Select all student whose score 75+
+    d.Find names of all cities where student from
+    e.Find the maximum marks of the student from each city
+    f.Find the average of the class.
+    g.Add new  column grade asssign grade  such that:
+        marks>80 grade=O
+        marks 70-80 , grade=A
+        marks 60-70 , grade=B
+
+Solution:
+    a. CREATE TABLE studentInfo(
+        roll_no INT PRIMARY KEY,
+        name VARCHAR(30),
+        city VARCHAR(30),
+        marks INT
+        );
+
+    b. INSERT INTO studentInfo(roll_No,name,city,marks) VALUES
+        (110, "adam","Delhi",76),
+        (108,"bob","Mumbai",65),
+        (124,"casey","Pune",94),
+        (112,"duke","Punew",80);
+    
+    c. SELECT * FROM studentInfo
+        WHERE marks>75;
+
+    d. SELECT DISTINCT city FROM studentInfo;
+
+    e. Select city,max(marks) 
+        FROM studentInfo
+        GROUP BY city; 
+
+    f. SELECT avg(marks) FROM studentInfo;
+
+    g. ALTER TABLE studentInfo
+        ADD COLUMN grade VARCHAR(2);
+
+        UPDATE studentInfo
+        SET grade ="O"
+        WHERE marks>80;
+
+        UPDATE studentInfo
+        SET grade ="A"
+        WHERE marks BETWEEN 70 and 80;
+
+        UPDATE studentInfo
+        SET grade ="B"
+        WHERE marks BETWEEN 60 and 70;

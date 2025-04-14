@@ -1,0 +1,33 @@
+1. Node.js: Javascript runtime environment.It is used for server side programming.
+Note: Node.js is not language,library or framework.
+
+2. Node REPL: Repeat Eavalulate Print Loop=>REPL.In this we can run our javascript code.
+
+N3. ode files: node <fileName>
+
+4. process: Process is the object which provide the informaion bout current node process.
+
+5. process.argv: returns array which contains parmeters which are passed at runtime.
+
+6. module.exports: special object.
+
+7. require(): built in function to include external modules that exist in separate file.
+
+8. NPM: Node Package Manager.It act as command line tool for installing package.It is standard package manager for node.
+9. Installing package:
+    a. Locally installation
+    Syntax: npm install <packageName>
+                    or
+            npm i <packageName>
+    Example: npm install figlet
+     b. Globally installation
+    Syntax: npm install -g <packageName>
+                    or
+            npm i -g <packageName>
+                followed by
+            npm link <packageName>
+10. node_module: it is the directory where dependency related to our porject are stored.
+11. package-lock.json: This file contains the information of the dependencies and sub-dependencies version installed.
+12. package.json: This file contains descriptive informaion of project metadat like name,dependencies details etc...
+                  We can create package.json file using "npm init" command.
+13. import module: using import keyword we selectively load only file or module in another file.We need to add "type=module" in package.json file.

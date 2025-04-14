@@ -1,0 +1,50 @@
+/*
+Media Features:
+    Syntax=>
+    @media(propertyname:propertyvalue){
+    element details on which it has applied.
+    }
+    width
+    orientation
+
+*/
+.mediaquery {
+    width: 800px;
+    height: 500px;
+    background-color: aqua;
+}
+
+@media(width:400px) {
+    .mediaquery {
+        background-color: red;
+    }
+
+}
+
+@media(min-width:200px) {
+    .mediaquery {
+        background-color: yellow;
+    }
+
+}
+
+@media(max-width:600px) {
+    .mediaquery {
+        background-color: blue;
+    }
+
+}
+
+@media(min-width:500px) and (max-width:600px) {
+    .mediaquery {
+        background-color: rgb(255, 0, 157);
+    }
+
+}
+
+@media(orientation:landscape) {
+    .mediaquery {
+        background-color: gold;
+    }
+
+}

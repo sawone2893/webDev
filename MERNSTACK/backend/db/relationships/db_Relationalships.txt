@@ -1,0 +1,156 @@
+SQL Database Relationship: It is the connection between tables.
+        There are following type of db relationships:
+        a. one to one:(Cardinality-1*1)
+                Example:
+                    Country(1)------------------------------>Country Representative(1)
+                    |id|countryName|representiveId|       |representiveId|representativeName|
+                                            |--------Foreign Key--------|
+        b. one to many:(Cardinality-1*n)
+                Example:
+                    User(1)--------------------------------->post(many)
+                    Customer(1)----------------------------->order(many)
+        
+        c. many to many:(Cardinality-n*n)
+                Example:
+                    Student(many)-------------------------->Subject(Many)
+================================================================================
+Mongo relationships:
+    a. one to many-Approach 1 (one to few): Store child document inside parent.
+        Example:
+        Zomato/Swiggy User--------------------------------->Addresss
+                                                            Home
+                                                            Office
+        Implementation:Refer  model/user.js file for details.
+            {
+                _id: ObjectId('67ccee2fd0c7d26ec8f95399'),
+                username: 'shab@258',
+                addresses: [
+                {
+                    location: 'P545, WallStreet',
+                    city: 'London',
+                    _id: ObjectId('67ccee2fd0c7d26ec8f9539a')
+                },
+                {
+                    location: 'S2313, Avenue mark',
+                    city: 'London',
+                    _id: ObjectId('67ccee2fd0c7d26ec8f9539b')
+                }
+                ],
+                __v: 0
+            }
+    
+    b. one to many-Approach 2: Store a reference of the child document inside the parent.
+        Example:
+            Customer---------------------------------------------->Order
+        
+        Implementation:Refer  model/customer.js file for details.
+        Order-
+            [
+            {
+                _id: ObjectId('67cd2f2605f0a1ed5509c4ba'),
+                item: 'Samosa',
+                price: 12,
+                __v: 0
+            },
+            {
+                _id: ObjectId('67cd2f2605f0a1ed5509c4bb'),
+                item: 'Chips',
+                price: 10,
+                __v: 0
+            },
+            {
+                _id: ObjectId('67cd2f2605f0a1ed5509c4bc'),
+                item: 'Cold Drink',
+                price: 20,
+                __v: 0
+            }
+            ]
+            Customer-
+            [
+            {
+                _id: ObjectId('67cd33e6292f881a5476453d'),
+                name: 'Rahul Kumar',
+                orders: [
+                ObjectId('67cd2f2605f0a1ed5509c4bb'),
+                ObjectId('67cd2f2605f0a1ed5509c4ba'),
+                ObjectId('67cd2f2605f0a1ed5509c4bc')
+                ],
+                __v: 0
+            }
+            ]
+    c. one to many - Approach 3 (one to squillions): Store reference to the parent document inside child.
+        Implementation:
+            User-
+            [  
+            {
+                _id: ObjectId('67cd4eeac2095fe092946b5e'),
+                name: 'Rahul Kumar',
+                email: 'rahul@gmail.com',
+                __v: 0
+            },
+            {
+                _id: ObjectId('67cd4f7dfc5055f0af65ef8f'),
+                name: 'Umesh Kumar',
+                email: 'umesh@gmail.com',
+                __v: 0
+            },
+            {
+                _id: ObjectId('67cd4f7dfc5055f0af65ef90'),
+                name: 'Raj Kumar',
+                email: 'raj@gmail.com',
+                __v: 0
+            }
+            ]
+            
+            Posts-
+            [
+            {
+                _id: ObjectId('67cd4eeac2095fe092946b5f'), 
+                content: 'I love India',
+                likes: 200,
+                user: ObjectId('67cd4eeac2095fe092946b5e'),
+                __v: 0
+            },
+            {
+                _id: ObjectId('67cd4f7dfc5055f0af65ef91'), 
+                content: 'I love India',
+                likes: 200,
+                user: ObjectId('67cd4f7dfc5055f0af65ef8f'),
+                __v: 0
+            },
+            {
+                _id: ObjectId('67cd4f7dfc5055f0af65ef92'),
+                content: 'I love Coding',
+                likes: 200,
+                user: ObjectId('67cd4f7dfc5055f0af65ef90'),
+                __v: 0
+            }
+            ]
+==============================================================================
+6 Rules of Thumb for MongoDB Schema Design:
+
+One: Favor embedding unless there is a compelling reason not to.
+
+Two: Needing to access an object on its own is a compelling reason not to embed it.
+
+Three: Arrays should not grow without bound. If there are more than a couple of hundred documents on the “many” side, don’t embed them; if there are more than a few thousand documents on the “many” side, don’t use an array of ObjectID references. High-cardinality arrays are a compelling reason not to embed.
+
+Four: Don’t be afraid of application-level joins: If you index correctly and use the projection specifier, then application-level joins are barely more expensive than server-side joins in a relational database.
+
+Five: Consider the read-to-write ratio with denormalization. A field that will mostly be read and only seldom updated is a good candidate for denormalization. If you denormalize a field that is updated frequently then the extra work of finding and updating all the instances of redundant data is likely to overwhelm the savings that you get from denormalization.
+
+Six: As always with MongoDB, how you model your data depends entirely on your particular application’s data access patterns. You want to structure your data to match the ways that your application queries and updates it.
+
+===============================================================================
+Handling Deletion using mongoose middleware:
+    a. Pre mongoose middleware: run before the query is executed.
+    b. post mongoose middleware: run after the query is executed.
+        Example:
+            customerSchema.post("findOneAndDelete", async (customer) => {
+            if (customer.orders.length) {
+                let res = await Order.deleteMany({ _id: { $in: customer.orders } });
+                
+                console.log(res);
+            }
+            });
+

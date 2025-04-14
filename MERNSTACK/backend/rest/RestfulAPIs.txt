@@ -1,0 +1,30 @@
+REST - Representational State Trasfer:It is architectural style.
+      It defines set of constraints for creating web services.
+      These are used to perform CRUD(Create, Read, Update, and Delete) opeartion on DB.
+
+CRUD Opeartion:
+                1. GET - To retreive record.
+                2. POST - To create new record.
+                3. PUT - To update existing record.
+                4. PATCH - To update existing record partially.
+                5. DELETE - To delete existing record.
+
+Example: Create Quora Post where we can perform below operations
+            1. All Post can be viewed.
+            2. Individual post can be viewed.
+            3. Post can be edit.
+            4. Post can be deleted.
+
+Creating RESTful APIs: 
+1. GET    /posts      to view all post.
+2. POST   /posts      to create new post.
+3. GET    /posts/:id  to view one post.
+4. PATCH  /posts/:id  to update post
+5. DELETE /posts/:id  to delete post
+
+Generating UUID (Universally Unique Identifier)using UUID Package: 
+This package is used to generate unique id's.
+Example:
+      const { v4: uuidv4 } = require('uuid');
+      let id=uuidv4();
+      console.log(`Id is: ${id}`);

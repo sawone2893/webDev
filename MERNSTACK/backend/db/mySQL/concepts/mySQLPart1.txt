@@ -1,0 +1,158 @@
+Database: It is the collection of formatted data.In a database, related tables are stored which are interconnected.
+There are two type of Databases:
+    1. SQL:These are the databases which stores data in form table.These are also called Relational Database.
+            Example:MYSQL,Oracle,PostgreSQL etc...
+    2. NoSQL:These are the database which stores data in form of document/Key-value/Graphs.These are also called Non Realtional Database.
+            Example:MangoDb,Cassandra etc...
+
+SQL:Structured Query Language-It is programming language used to access data from database.
+
+Table in SQL:Table is collection of the rows and columns.
+            Columns design is called Schema.
+            Rows are called tuples.
+            Example:User table.
+            id |name |followers|following|------------>Schema(id,name,followers,following)
+            ------------------------------
+            101|adman|125      |365      |------------->Row(Single row contains data of single user.)
+            201|Aman |546      |46       |
+
+-----------------------------------------------------------
+Database Queries:
+1. To create database:
+    Syntax: CREATE DATABASE <dataName>;
+            CREATE DATABASE IF NOT EXIST <dataName>;
+    Example: CREATE DATABASE college;
+
+2. Delete created database
+    Syntax: DROP DATABASE <dataName>;
+            DROP DATABASE  IF NOT EXIST <dataName>;
+    
+    Example: DROP DATABASE college;
+
+3. To use existing database.
+    Syntax: USE <database>;
+    Example: USE college;
+    
+4. To display available datatbases
+    Syntax: SHOW DATABASES;
+
+5. To display table inside a database
+    Syntax: SHOW TABLES;
+-------------------------------------------------------------------------------------------
+Datatypes
+1. CHAR - string(0-255),can store fixed length characters.
+2. VARCHAR - string(0-255),can store characters upto given length
+3. BLOB - string(0-65535),can store binary large objects
+4. INT - integer
+5. TINYINT - integer(-128 to 127)
+6. BIGINT - integer
+7. BIT - can store x-bit values,x can range from 1 to 64
+8. FLOAT - Decimal number with precision to 23 digits
+9. DOUBLE - Decimal number with precision 24 to 53 digits
+10. BOOLEAN - boolean values 0 or 1
+11. DATE - date in format of YYYY-MM-DD ranging from 1000-01-01 to 9999-12-31
+12. YEAR - year in 4 digits  format ranging from 1901 to 2155
+-------------------------------------------------------------------------------------------
+Constraints:Rule for the data in the table
+1. NOT NULL -  column can have null value
+2. UNIQUE - All values in column are different
+3. CHECK - It can limit the values allowed in the column.
+4. DEFAULT - sets the defult value of a column.
+
+Example:
+salary INT DEFAULT 2500
+CONSTRAINT age_check CHECK (age>=13)
+-------------------------------------------------------------------------------------------
+Key constraints:
+
+PRIMARY KEY: 
+It is column or set of columns in a table that uniquely  identifies each row.
+Column whose value is NOT NULL and UNIQUE.
+There can be only one PRIMARY KEY.
+
+Syntax: <columnName> <datatype> <constraints>,
+        PRIMARY KEY(columnName);
+
+FOREIGN KEY:
+It is column or set of columns in a table that refers to the PRIMARY KEY in an another table.
+It create relation between tables.
+It is the PRIMARY KEY in the another table.
+It can be duplicate or have null values.
+There can be mulitple FOREIGN KEYs
+
+Syntax: <columnName> <datatype> <constraints>,
+        FOREIGN KEY(columnName) references <anotherTableName>(columnName)
+
+-------------------------------------------------------------------------------------------
+Tables Queries:
+1. To create a table:
+    Syntax: CREATE TABLE <tableName>(
+            <columnName1 dataType constraints>,
+            <columnName2 dataType constraints>,
+            <columnName3 dataType constraints>,
+            <columnName4 dataType constraints>,
+            );
+
+    Example:
+            CREATE TABLE student(
+                rollNo INT,
+                name VARCHAR(30),
+                age INT
+            );
+============Examle of Constraints and KEYs==========================
+            CREATE TABLE user(
+                id INT NOT NULL,
+                age INT CONSTRAINT age_check CHECK (age>=13),
+                name VARCHAR(30) NOT NULL
+                email VARCHAR(50) UNIQUE
+                followers INT DEFAULT 0,
+                following INT DEFAULT 0,
+                PRIMARY KEY(id) 
+            );
+
+            CREATE TABLE posts(
+                id INT NOT NULL,
+                content VARCHAR(100),
+                user_id INT,
+                FOREIGN KEY(user_id) references user(id)
+            );
+=========================================================================
+
+2. To insert records into tables.
+    Syntax: INSERT INTO <tableName> VALUES
+            (<col1Value>,<col2Value>,<col3Value>),
+            (<col1Value>,<col2Value>,<col3Value>);
+                        or 
+            INSERT INTO <tableName>(columnName1,columnName2,columnName3...) VALUES
+            (<col1Value>,<col2Value>,<col3Value>),
+            (<col1Value>,<col2Value>,<col3Value>);            
+    Example:
+            INSERT INTO student VALUES
+            (101,"Adma",35),
+            (101,"Anna",25);
+                    or
+            INSERT INTO student(id,name,age) VALUES
+            (101,"Adma",35),
+            (101,"Anna",25);
+            ============================
+            INSERT INTO user VALUES 
+            (101,"Raj","raj25@gmail.com",2145,3652),
+            (102,"Raja","raja425@gmail.com",245,352),
+            (104,"Rajesh","rajesh9825@gmail.com",145,652),
+            (108,"Raju","raju5425@gmail.com",214,365),
+            (103,"Rama","ram25785@gmail.com",4145,36152);
+                            or
+            INSERT INTO user(id,name,email,followers,following) VALUES 
+            (101,"Raj","raj25@gmail.com",2145,3652),
+            (102,"Raja","raja425@gmail.com",245,352),
+            (104,"Rajesh","rajesh9825@gmail.com",145,652),
+            (108,"Raju","raju5425@gmail.com",214,365),
+            (103,"Rama","ram25785@gmail.com",4145,36152);
+
+
+3. To view table records.
+    Syntax: SELECT * FROM <tableName>;//Display records with all the columns.
+    Example: SELECT * FROM student;
+
+    Syntax: SELECT columnName1,columnName2,columnName3 ... FROM <tableName>;//Display records with specific column names.
+    Example: SELECT id,name FROM student;

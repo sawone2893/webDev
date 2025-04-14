@@ -1,0 +1,627 @@
+::::::::::::::::::::::::::::::::::::::::Major Project Phase 3 Part A- MVC design pattern implementation,Router.route,Re-styling rating,Image Upload and Save files in local and Cloud ::::::::::::::::::::::::::::::::::::::::
+1. MVC: Model View Controller-It is design pattern for maintaining the code base.
+    Model-Stores the schema
+    View-Stores the rendering files.
+    Controller-Stores the core functionality of the backend.
+
+    a. Implementing MVC for listing-
+        i. Create folder a called "Controllers"
+        ii. Add a Controller file called "listings.js" for listing.
+        iii. Move the backend code from routes/listing.js to this controller.
+    
+    b. Implementing MVC for review-
+        ii. Add a Controller file called "reviews.js" for listing.
+        iii. Move the backend code from routes/review.js to this controller.
+    
+    c. Implementing MVC for user-
+        ii. Add a Controller file called "users.js" for listing.
+        iii. Move the backend code from routes/user.js to this controller.
+
+2. Router.route:
+    Use router.route() to avoid duplicate route naming and thus typing errors.
+    Returns an instance of a single route which we can then use to handle HTTP verbs with optional middleware
+
+    a. Implementing router.route to listing route
+    b. Implementing router.route to review route
+    c. Implementing router.route to user route
+
+3. Re-styling rating
+    a. We will use library called starablity [https://github.com/LunarLogic/starability] to implement star based rating.
+    b. We need to add css file:rating.css and save the default css for starablity-slot [https://github.com/LunarLogic/starability/blob/master/starability-css/starability-slot.css] to our css folder.
+    c. Add this css file at the end of head section of boilerplate.
+        <link rel="stylesheet" href="css/rating.css" />
+    d. Copy below the starability-slot html code for displaying star on the UI and add it to show.ejs
+        <div class="mb-3 mt-3">
+        <label for="rating" class="form-label">Rating</label>
+        <fieldset class="starability-slot">
+          <input
+            type="radio"
+            id="no-rate"
+            class="input-no-rate"
+            name="review[rating]"
+            value="1"
+            checked
+            aria-label="No rating."
+          />
+          <input
+            type="radio"
+            id="first-rate1"
+            name="review[rating]"
+            value="1"
+          />
+          <label for="first-rate1" title="Terrible">1 star</label>
+          <input
+            type="radio"
+            id="first-rate2"
+            name="review[rating]"
+            value="2"
+          />
+          <label for="first-rate2" title="Not good">2 stars</label>
+          <input
+            type="radio"
+            id="first-rate3"
+            name="review[rating]"
+            value="3"
+          />
+          <label for="first-rate3" title="Average">3 stars</label>
+          <input
+            type="radio"
+            id="first-rate4"
+            name="review[rating]"
+            value="4"
+          />
+          <label for="first-rate4" title="Very good">4 stars</label>
+          <input
+            type="radio"
+            id="first-rate5"
+            name="review[rating]"
+            value="5"
+          />
+          <label for="first-rate5" title="Amazing">5 stars</label>
+        </fieldset>
+      </div>
+    e. If you want to diasplay saved rating in star.Update below code in show.ejs in place of p tag where rating is getting display in numbers.
+        <p class="starability-result card-text" data-rating="<%= review.rating%>"></p>
+
+4. Image upload and save in local:
+    a. We need to make form capable of sending files.
+        i. We need to maniplulate the add new listing form [new.ejs].We need to set enctype ="multipart/form-data" for form.
+          <form action="/listings" method="post" novalidate class="needs-validation" enctype="multipart/form-data">
+        ii. We need to change type attribute value to file for input element [new.ejs].
+          <div class="mb-3">
+            <label for="image" class="form-label">Upload Listing Image</label>
+            <input type="file" name="listing[image]" class="form-control" />
+          </div>
+        iii. Multer- Multer is a node.js middleware for handling multipart/form-data, which is primarily used for uploading files.
+             Multer will not process any form which is not multipart (multipart/form-data)
+             * We need to install multer library to achieve this.
+                npm i multer
+             * Now add below line of code to access upload file.
+                const multer  = require('multer');
+                const upload = multer({ dest: 'uploads/' });
+             * Pass the middleware: upload.single(listing[image]') in your post route.
+             * Access file attributes using below code
+                req.file
+5. Image upload and save in Cloud:
+    a. We will use 3rd party service:Cloudinary.
+    b. Create your account on Cloudinary Platform [https://cloudinary.com/users/register_free] using your GitHub account.
+    c. We will stores our credentials inside .env file.
+    d. To access .env file data we need to install dotenv library
+        [Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env.]
+        npm i dotenv
+        require('dotenv').config()
+        console.log(process.env)
+    e. Create a .env file and store CLOUD_NAME,CLOUD_API_KEY and CLOUD_API_SECRET in it.
+    f. Add below code inside the app.js file at the very top for access .env file data.
+      if(process.env.NODE_ENV!="production"){
+        require('dotenv').config();
+      }
+    g. We need to install below libraries to store files in Cloudinary Platform.
+        i. cloudinary - The Cloudinary Node SDK allows you to quickly and easily integrate your application with Cloudinary.
+                        Effortlessly optimize, transform, upload and manage your cloud's assets.
+                        npm i cloudinary
+
+        ii. multer-storage-cloudinary - A multer storage engine for Cloudinary.
+                                        npm i multer-storage-cloudinary
+    h. Now ,create a cloudConfig.js file where we will setup configuration to connect with Cloudinary Platform.
+    i.Then, use cloudConfig  in add new listing [routes/listing.js] request for upload images to Cloudinary Platform.
+        const multer = require("multer");
+        const {storage} = require("../cloudConfig");
+        const upload = multer({ storage });
+
+  6. Save the generated link into mongoDb:
+    a. We will update the listingSchema for image property as below.
+        image:{
+          url:String,
+          filename:String
+        }
+    b. We pass our middleware: upload.single("listing[image]") to our listing create route.
+    c. We will extract url and filename from req.file and save it into mongoDb in our listingController.
+        let url=req.file.path;
+        let filename=req.file.filename;
+        newListing.image={url,filename};
+  
+  7 . Re-initialize listing data in data with new format.
+      a. We can download data.js file from github [https://github.com/apna-college/wanderlust/blob/main/init/data.js] and replace it with our data.js file.
+      b. Run the index.js file to update data in mongoDb
+          node index.js
+      c. We need to update code from [<%= listing.image %>] to [<%= listing.image.url %>] for access image in below locations
+        i. views/listings/index.ejs
+        ii. views/listings/show.ejs
+
+:::::::::::::::::::::::::::::::::::::::: Major Project Phase 3 Part B Edit Listing Image and Maps ::::::::::::::::::::::::::::::::::::::::
+1. Edit Listing image:
+    a. We need to make form capable of sending files.
+        i. We need to maniplulate the aedit listing form [edit.ejs].We need to set enctype ="multipart/form-data" for form.
+          <form action="/listings/<%= listing._id %>?_method=PUT" method="post" novalidate class="needs-validation" enctype="multipart/form-data">
+        ii. We need to change type attribute value to file for input element [edit.ejs].
+          <div class="mb-3">
+            <label for="image" class="form-label">Upload Listing Image</label>
+            <input type="file" name="listing[image]" class="form-control" />
+          </div>
+    b. We pass our middleware: upload.single("listing[image]") to our listing update route.
+    c. We will extract url and filename from req.file and save it into mongoDb in our listingController.
+        if (typeof req.file != "undefined") {
+          let url = req.file.path;
+          let filename = req.file.filename;
+          listing.image = { url, filename };
+          listing.save();
+        }
+2. Image Preview for Edit page:
+    a. We will add image tag before upload input.
+        <div class="mb-3">
+        Original Lsiting Image
+        <img src="<%= originalImageUrl %>" alt="listingImage" />
+      </div>
+    b. We will reduce the pixels for the original image for preview using cloudinary.
+    c. We will update the logic for the same in the renderEditFrom middleware in listing controller.
+        let originalImageUrl=listing.image.url;
+        originalImageUrl.replace("/upload","/upload/w_250");
+        res.render("listings/edit.ejs", { listing,originalImageUrl});
+
+3. Implementing Maps:
+    a. We use MapBox API to display maps in our listing.
+    b. We Will create account on MapBox Platform.
+    c. We will store public token in our .env file to use this API.
+    d. We will use Mapbox GL JS library 
+                  [It is a client-side JavaScript library for building web maps and web applications with Mapbox's modern mapping technology.
+                  You can use Mapbox GL JS to display Mapbox maps in a web browser or client, add user interactivity, and customize the map experience in your application.]
+    
+    e. Add below css and js to your boilerplate.
+        <link href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css" rel="stylesheet">
+        <script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
+    
+    f.Add a div on show.ejs page below All review  sction where we wan to show out map.
+        <div class="col-8 offset-3 mb-3">
+          <h3>Where you'll be</h3>
+          <div id="map"></div>
+        </div>
+    g. Need to add styling to our map.We will add below styling to our style.css.
+        #map {
+            height: 400px;
+            width: 80vh;
+        }
+    h. Create a map.js file inside public/js and paste below code init.
+        mapboxgl.accessToken =mapToken;
+        const map = new mapboxgl.Map({
+          container: "map", // container ID
+          center: [-74.5, 40], // starting position [lng, lat]. Note that lat must be set between -90 and 90
+          zoom: 9, // starting zoom
+        });
+    i. Include below script tag at the start of the show.ejs to access Map token.
+        <script>
+          const mapToken = "<%= process.env.MAP_TOKEN%>";
+        </script>
+    j. Include map.js file inside script tag in show.ejs at the end.
+        <script src="/js/map.js"></script>
+
+4. Implementing Geocoding: It is process of conveting addresses[like a street addresses] into geographical coordinates[latitudes and longitude].
+                          This we can use to place a marker on Map or position the Map.
+      a. We will use Geocoding API provided by MapBox for the same.
+          The Mapbox Geocoding API does two things: forward geocoding and reverse geocoding
+            Example 1: Forward geocoding converts location text into geographic coordinates, turning 2 Lincoln Memorial Circle SW into -77.050,38.889.
+            Example 2: Reverse geocoding turns geographic coordinates into place names, turning -77.050, 38.889 into 2 Lincoln Memorial Circle SW.
+      
+      b. We will implement Geocoding for the add new Listing.
+      c. We need to install mapbox/mapbox-sdk.
+          npm install @mapbox/mapbox-sdk
+      d. We need to add below to our listing controller after imports to create geocoding Client.
+          const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+          const mapToken=process.env.MAP_TOKEN;
+          const geocodingClient = mbxGeocoding({ accessToken: mapToken });
+      e. We need to modify model for listing to store coordinates in the mongoDb.
+         i. We will use GeoJSON [It is a format for storing geographic points and polygons.] for the same.
+         ii. We will add new field "geometry" in the listing model as follows
+              geometry: {
+                  type: {
+                    type: String, // Don't do `{ location: { type: String } }`
+                    enum: ['Point'], // 'location.type' must be 'Point'
+                    required: true
+                  },
+                  coordinates: {
+                    type: [Number],
+                    required: true
+                  }
+                }
+
+      f. We need to add below for createListing middleware inside our listing controller to fetch co-ordinate for the location and store them in the mongoDb .
+          let response = await geocodingClient
+              .forwardGeocode({
+                query: req.body.listing.location,
+                limit: 1,
+              })
+              .send();
+            newListing.geometry = response.body.features[0].geometry;
+
+5. Adding Map Marker to Map:
+    a. Add below line of code to access coordinates from listing inside the script tag in show.ejs.
+       const listing= <%-JSON.stringify(listing)%>;
+
+    b. Update the code for map.js file inside public/js as follows-
+        mapboxgl.accessToken =mapToken;
+        const map = new mapboxgl.Map({
+          container: "map", // container ID
+          center: listing.geometry.coordinates, // starting position [lng, lat]. Note that lat must be set between -90 and 90
+          zoom: 9, // starting zoom
+        });
+
+        const marker=new mapboxgl.Marker({color:"red"})
+        .setLngLat(listing.geometry.coordinates)
+        .addTo(map);
+
+6. Adding Map popup.
+    a. To add the popup to Map marker,we need to use method setPopup as follows-
+        .setPopup(
+            new mapboxgl.Popup({ offset: 25 }).setHTML(
+              `<h4>${listing.title}</h4><p>Exact location will be provided after booking</p>`
+            )
+          )
+    
+    b. Update the code for map.js file inside public/js as follows-
+          mapboxgl.accessToken = mapToken;
+          const map = new mapboxgl.Map({
+            container: "map", // container ID
+            center: listing.geometry.coordinates, // starting position [lng, lat]. Note that lat must be set between -90 and 90
+            zoom: 9, // starting zoom
+          });
+
+          const marker = new mapboxgl.Marker({ color: "red" })
+            .setLngLat(listing.geometry.coordinates)
+            .setPopup(
+              new mapboxgl.Popup({ offset: 25 }).setHTML(
+                `<h4>${listing.title}</h4><p>Exact location will be provided after booking</p>`
+              )
+            )
+            .addTo(map);
+
+:::::::::::::::::::::::::::::::::::::::: Major Project Phase 3 Part C Fixing Home,Add UI for Filter,Tax Switch and Search ::::::::::::::::::::::::::::::::::::::::
+1. Fixing Home Page:Index.js
+    a. Modify the Navigation bar with below changes.
+        i. Remove Home link.
+        ii. Replace "All "listing" with "Explore"
+        iii. Replace "Add new Listing" with "Airnb your home" and move it to right side.
+        iv. Make Signup, Login and Logout text: bold
+        v. Change routing for icon to "/listings"
+        vi. Remove the route: "/" from app.js
+ 
+ 2. Add UI Filters: 
+    a. Need to add filters at index.js in place of "All Listing". We will add below filters -
+        <div id="filters">
+          <div class="filter">
+            <div><i class="fa-solid fa-fire"></i></div>
+            <p>Trending</p>
+          </div>
+          <div class="filter">
+            <div><i class="fa-solid fa-bed"></i></div>
+            <p>Rooms</p>
+          </div>
+          <div class="filter">
+            <div><i class="fa-solid fa-mountain-city"></i></div>
+            <p>Iconic Cities</p>
+          </div>
+          <div class="filter">
+            <div><i class="fa-solid fa-mountain"></i></div>
+            <p>Mountains</p>
+          </div>
+          <div class="filter">
+            <div><i class="fa-solid fa-chess-rook"></i></div>
+            <p>Castles</p>
+          </div>
+          <div class="filter">
+            <div><i class="fa-solid fa-tents"></i></div>
+            <p>Camping</p>
+          </div>
+          <div class="filter">
+            <div><i class="fa-solid fa-cow"></i></div>
+            <p>Farms</p>
+          </div>
+          <div class="filter">
+            <div><i class="fa-solid fa-person-swimming"></i></div>
+            <p>Amazing Pools</p>
+          </div>
+          <div class="filter">
+            <div><i class="fa-solid fa-snowflake"></i></div>
+            <p>Arctic</p>
+          </div>
+          <div class="filter">
+              <div><i class="fa-solid fa-sailboat"></i></div>
+              <p>Boats</p>
+            </div>
+            <div class="filter">
+              <div><i class="fa-solid fa-igloo"></i></div>
+              <p>Domes</p>
+            </div>
+</div>
+    b. Add style as below for filters:
+        #filters {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+          }
+          .filter {
+            text-align: center;
+            margin-right: 1rem;
+            margin-top: 2rem;
+            opacity: 0.7;
+          }
+          .filter:hover {
+            opacity: 1;
+            cursor: pointer;
+          }
+          .filter p {
+            font-size: 0.8rem;
+          }
+
+
+3. Add UI Tax Switch: 
+    a. Added below Tax Switch inside div with id=filters at the end.
+        <div class="tax-toggle">
+            <div class="form-check-reverse form-switch">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="flexSwitchCheckDefault"
+              />
+              <label class="form-check-label" for="flexSwitchCheckDefault"
+                >Display total after tax</label
+              >
+            </div>
+        </div>
+    b. Adding functionality to tax Switch
+        i.We need to add tax percent inside listing pricing as below:
+            <i class="tax-info">&nbsp; &nbsp; + 18% GST</i> 
+        ii. Add style as below at the initials:
+            .tax-info{
+              display: none;
+            }
+        iii. We will add a click event on toggling of switch at index.ejs as follows.
+              <script>
+                let taxSwtich = document.getElementById("flexSwitchCheckDefault");
+                taxSwtich.addEventListener("click", () => {
+                  let taxInfo=document.getElementsByClassName("tax-info");
+                  for(let info of taxInfo){
+                    if(info.style.display!="inline"){
+                      info.style.display="inline";
+                    }else{
+                      info.style.display="none";
+                    }
+                  }
+                });
+              </script>
+        iv.Add styling to tax switch as below:
+            .tax-toggle {
+                border: 1px solid black;
+                border-radius: 1rem;
+                height: 3.25rem;
+                padding: 1rem;
+                margin-left: 3rem;
+                display: flex;
+                align-items: center;
+              }
+
+4. Make UI Filters functional:
+    a. Create include "filters.ejs".Move the filter UI code to this file from "index.ejs".Add below code in place of remove code.
+        <%- include("../includes/filters.ejs") %>
+    b. Add GET form with action attribute values as "/listings"and keep filters inside it in filters.ejs.
+    c. Make for attribute value of label and id of input same for each filter.
+    d. Add value attribute value equal to category name.
+    e. Add name="category" and onchange="this.form.submit()" for every input of each filter.
+    f. Move filter style to style.css file from "index.ejs" style tag.
+    g. Add field name "category" in the listing model as below with some predefined category names.
+            category: {
+                type: String,
+                enum: [
+                  "Trending",
+                  "Rooms",
+                  "Iconic Cities",
+                  "Mountains",
+                  "Castles",
+                  "Camping",
+                  "Farms",
+                  "Amazing Pools",
+                  "Arctic",
+                  "Boats",
+                  "Domes",
+                  "Beaches",
+                ],
+                required: true
+            }
+    h. Add the category data in the  the "data.js" for all listing.
+    i. Re-insert the listing data into mongoDb by executing "index.js" file from init folder.
+    j. Update the code for middleware: "index" inside the "listing" Controller as below.
+          let category=req.query.category;
+            let allListings;
+            if(category==="All"||category===undefined){
+              allListings = await Listing.find({});
+            }else{
+              allListings = await Listing.find({category:category});
+              if (!allListings.length>0) {
+                req.flash("error", `Listing for category: ${category} does not exist!`);
+                res.redirect("/listings");
+              }
+            }
+          res.render("listings/index.ejs", { allListings });
+      k. Add bootstrap dropdown: "category" to New form [ new.js] and Edit Form[edit.ejs].
+      l. Display category in Show Form [show.ejs].
+          <h4>Category: <%= listing.category %></h4>
+
+5. Create a utility for getting geometry based on location.
+      a. Create "coordinateGenerator.js" inside public/js folder.
+      b. Move the code for generating location coordinates from listing Controller.
+      c. Create function called "getGeometry" inside "coordinateGenerator.js".
+      d. Import the "getGeometry" to listingController using below code.
+          const { getGeometry } = require("../public/js/coordinateGenerator");
+      e. Update middleware: createListing for adding geometry to new listing.
+            newListing.geometry = await getGeometry(req.body.listing.location);
+      f. Update middleware: updateListing for adding geometry to existing listing after any edit operation.
+
+6. Add UI for Search and Make it functional:
+      a. Add bootstrap search commponent to your navbar [navbar.js]
+            <div class="navbar-nav ms-auto">
+                    <form class="d-flex" role="search" method="get" action="/listings">
+                      <input
+                        class="form-control me-2 search-inp"
+                        type="search"
+                        name="destination"
+                        placeholder="Search Destination"
+                      />
+                      <button class="btn search-btn" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>Search
+                      </button>
+                    </form>
+            </div>
+
+      b. Add custom style to your search commponent.
+            /** NavBar Search **/
+            .search-btn {
+                background-color: #fe424d;
+                color: #fff;
+                border-radius: 25px;
+                padding: 0 1rem 0 1rem;
+            }
+
+            .search-btn:hover {
+                background-color: #fe424d;
+                color: #fff;
+            }
+
+            .search-btn i {
+                display: inline;
+                margin-right: .5rem;
+            }
+
+            .search-inp {
+                border-radius: 25px;
+                padding: 0.5rem 3rem 0.5rem 3rem;
+                font-size: 1rem;
+            }
+            
+      c. Add the code below for middleware: "index" inside the "listing" Controller to handle search based on destination.
+            let destination = req.query.destination;
+              if (destination) {
+                allListings = await Listing.find({ country: destination });
+                if (!allListings.length > 0) {
+                  req.flash("error", `Listing for destination: ${destination} does not exist!`);
+                  //res.redirect("/listings");
+                }
+              }
+
+:::::::::::::::::::::::::::::::::::::::: Major Project Phase 3 Part D Mongo Atlas,Mongo Session Store,Deployment with render,Move code to GitHub, Connect Render with GitHub , and Create a Service ::::::::::::::::::::::::::::::::::::::::
+1. Mongo Atlas: 
+    a. Create your account using Gmail Account at https://www.mongodb.com/atlas and follow the steps as suggested on the portal.
+    b. Register mail id: shabryn2893@gmail.com
+    c. Once you follow all steps then you have  cloud database your url: mongodb+srv://shabryn2893:<db_password>@cluster0.okjjj4q.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+    d. Add your IP address in the Atlas DB Platform.
+    e. Add this cloud db url to your .env file with key named ATLAS_DB_URL.
+    f. Update your db_password in the above ATLAS_DB_URL.
+    g. Replace local mongoDb url with ATLAS_DB_URL in app.js file as below.
+        const MONGODB_URL = process.env.ATLAS_DB_URL;
+
+2. Mongo Session Store:
+    a. We will be use using connect-mongo[A MongoDB-based session store.] for storing session information as previously it was getting stored in the local.
+    b. We are using "connect-mongo" to store session information in Atlas DB.
+    c. We need to insatll library using below command:
+        npm i connect-mongo 
+    d. Once it is install, we need to create mongo store which will be pass in the session options.
+    e. Import the mongo store as below after session-express.
+        const session = require("express-session");
+        const MongoStore = require("connect-mongo");
+    e. We can create mongo store as follows:-
+        const mongoStore = MongoStore.create({
+          mongoUrl: MONGODB_URL,
+          crypto: {
+            secret: process.env.SECRET,
+          },
+          touchAfter: 24 * 60 * 60,
+        });
+    f. Now add this mongo store to session options as below.
+        //Setting session options
+        const sessionOptions = {
+          store: mongoStore,
+         secret: process.env.SECRET,
+          resave: false,
+          saveUninitialized: true,
+          cookies: {
+            expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+            maxAge: Date.now() + 7 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+          },
+        };
+    g. We need to handle the error also if occured while creating session.
+        mongoStore.on("error", () => {
+            console.log("ERROR IN MONGO SESSION STORE",err);
+        });
+    h.Session info will be expired after 14 days as this is the default value to expired in cookies.
+
+3. Deployment with render:
+    a. There are multiple Platform for deploying our project.For example render,netlify,cyclic etc...
+    b. We will be using Render Platform[https://dashboard.render.com/].
+    c. We need to create a account on Render Platform.We are siging up with our GitHub account[shabryn2893@gmail.com] here.
+    d. Add the engine in the package.json at top.
+        "engines": {
+            "node": "20.17.0"
+        },
+
+4. Moving Project to GitHub:
+    a. Create a private repo in GitHub with name "wanderlust".
+    b. Before moving code to GitHub, move secret in the .env file.
+    c. We need to add .env, node_module in gitignore file.
+    d. Create a folder in your to take clone of the repo:"wanderlust".
+    d. Clone the repository
+        git clone https://github.com/shabryn2893/wanderlust.git
+    
+    e.Now copy your wanderlust web app code into this folder.
+    f.Commit and push the code to the repo.
+
+5. Connect Render with GitHub and Create Service:
+    a. Log into Renderc Platform
+    b. Click on New Web Service option from dashboard.
+    c. Select GitHub inside the configure tab.
+    d. Login to GitHub
+    e. To install Render, Select option: Only select repository
+    f. select your repo name: "shabryn2893/wanderlust" from the dropdown.
+    g. Click on the Install button.
+    h. if not login, please login.
+    i. Give name your web service:wanderlust
+    j. Select language as"Node".
+    k. Select branch name as "main".
+    l. Let the region be default.
+    m. Type Build command as "npm install".
+    n. Type Start command as "node app.js"
+    o. Select the instance type as "For hobby projects"
+    p. Add the environment variables from the .env file like CLOUD_NAME,CLOUD_API_KEY,CLOUD_API_SECRET,MAP_TOKEN,ATLAS_DB_URL,SECRET
+    q. Click on deploy web service.
+    r. Deployment will fail due to "MongoServerSelectionError" as we have not whitelisted the IP address 
+       and currently we have add our local IP in the Atlas DB.
+       We need to update the render IP address there.
+    s. Click on the Logs,In log you will find reason for failure.
+    t. Click on the Connect button to get the Static Outbound IP Addresses.
+        100.20.92.101
+        44.225.181.72
+        44.227.217.144
+    u. Now we need to whitelisted above IP address in Atlas DB Platform.Then log into Atlas DB Platform.
+    v. Click on the Network Access under Security
+    w. Click on ADD IP ADDRESSS button and add all the ip addresses mentioned above.
+    x. Again try to deploy web service on Render.
+    y. Access this web app at "https://wanderlust-r2n0.onrender.com".

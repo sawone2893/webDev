@@ -1,0 +1,57 @@
+/*Box Model in CSS
+height
+width
+border: width style color
+        border-width
+        border-style
+        border-color
+
+        border-left
+        border-right
+        border-top
+        border-bottom
+border-radius
+padding: 
+        padding-left
+        padding-right
+        padding-top
+        padding-bottom
+margin
+        margin-left
+        margin-right
+        margin-top
+        margin-botto
+
+Display
+*/
+
+        /*
+Shorthand
+---------
+Property name can be like Padding,Margin
+#1 For all side - property name:50px;
+#2 top & bottom |left & right - property name:5px 2px;
+#3 top|left& right|bottom - property name:5px 2px 8px;
+#4 top|right|bottom|left - property name:1px 2px 3px 4px;
+*/
+
+div {
+    height: 200px;
+    width: 500px;
+    background-color: pink;
+    border-width: 5px;
+    border-style: solid;
+    border-color: yellow;
+    border-top: 5px dashed blue;
+    border-radius: 15px;
+    padding-top: 50px;
+    padding-left: 20px;
+    padding-bottom: 50px;
+    margin-top: 5px;
+    margin-bottom: 7px;
+    margin-left: 9px;
+    margin-right: 11px;
+}
+h1{
+    border: 2px dotted green;
+}

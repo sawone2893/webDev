@@ -1,0 +1,116 @@
+React:
+=====
+    i. It is javascript library for creating UI.
+    ii. React apps are made out of components.A component is a piece of the UI (user interface) that has its own logic and appearance. 
+    iii. A component can be as small as a button, or as large as an entire page.
+    iv. React components are JavaScript functions that return markup.
+    
+JSX:
+====
+ Javascript Extension Syntax
+ It alllows us to write HTML inside javascript.
+ Internal Conversion: JSX===>Babel===>JS
+
+ Setup Environment for React:
+ ===========================
+    1. We will be using React with Vite.We will run below command to use React with Vite.
+        npm create vite@latest
+    2. After running above command following tghe instructions
+        a. project name: basic-react-app.
+        b. Select a framework:React
+        c. Select a variant: javascript
+        d. Move inside the basic-create-app folder and run below commands.
+            npm install: to install dependencies        
+            npm run dev: to start the server 
+        e. To access basic react app.Open below url in browser.
+            http://localhost:5173/
+
+1. Basic Structure of React App:
+    This contain following components:
+        i. public
+        ii. src
+            a. assets
+            b. App.css
+            c. App.jsx
+            d. index.css
+            e. main.jsx
+        iii. .gitignore: This store information of the files or folder to be ignore.
+        iv. index.html
+        v. package-lock.json
+        vi. package.json
+        vii.README.md
+        viii. vite.config.js
+
+2. Creating our own component and Rendering a component:
+    Syntax:component creation
+        function NameOFtheComponent(){
+            return (
+                <h1>Hello World</h1>
+            );
+        }
+    Syntax:rendering component
+        <ComponentName></ComponentName>
+                    or
+        <ComponentName/>
+    
+    Example:
+    function Title(){
+        return (
+            <h1>Hello World</h1>
+        );
+    }
+       <Title> </Title> 
+            or
+       <Title/>       
+3. Writing markup in JSX:
+    a. Return a  single root element.
+    b. Close all the tags.
+    c. camelCase most of the things.
+
+    Example:
+
+    function Description(){
+        return (
+        <p className="desc">I am description</p>
+        );
+    }
+4. React Fragment:These let you group a list of children without adding extra node to the DOM.
+    <></> These are call react Fragment
+
+    Example:
+        function Title(){
+        return (
+            <>
+            <h1>Hello World</h1>
+            <h3>Hello World</h3>
+            </>
+        );
+    }
+
+5. JSX with Curly braces:Whatever written inside curly braces {} will be treated as javascript code in JSX.
+    Example: 
+        function Message(){
+            let name="Shabbir Rayeen"
+        return (
+            <>
+            <h1>Hello,{name}</h1>
+            </>
+        );
+    }
+
+6. Importing and exporting component:
+
+    a. A file can only have one default export, but it can have numerous named exports!
+    b. Use default exports if the file exports only one component
+    c. Use named exports if it exports multiple components and values.
+
+        --------------------------------------------------------------------------------------------
+        | Syntax	    Export statement	                    Import statement
+        | Default	    export default function Button() {}	     import Button from './Button.js';
+        | Named	        export function Button() {}	            import { Button } from './Button.js';
+        --------------------------------------------------------------------------------------------
+
+7. Styling react components:
+    a. name of the css file will be the same as the jsx file name of that component.
+    b. We need to import css file as below to implement style to any component
+        import "Procuct.css";

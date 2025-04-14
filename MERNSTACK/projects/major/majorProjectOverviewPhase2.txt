@@ -1,0 +1,196 @@
+::::::::::::::::::::::::::::::::::::::::Major Project Phase 2 Part A - Creating Review Model Functionality ::::::::::::::::::::::::::::::::::::::::
+1. Creating Review Model:
+    a. Add new Schema for Review in model folder.
+    b. Every listing will have some reviews so there will be 1 to many relationship between listing and review model.
+        We will add reviews array to our listing and update it's schema.
+    c. Updating Listing Details heading with listing title.
+
+2. Create Review:
+    a. Add new form inside show.ejs to add review for the specific listing.
+    b. Use the bootstrap to create Review Form.
+    c. Submitting a review form at Review Route: POST /listings/:id/reviews.
+
+3. Validation for Reviews:
+    a.Client side Validation - Form Validation using bootstrap.
+    b.Server side Validation using Joi.
+
+4. Render Reviews:
+    a. Display all review of the particular listing on the show page along with it's rating.
+
+5. Adding Styling to reviews:
+    a. Display review in card format.
+
+6. Delete review:
+    a.Adding functionality to delete individual review.
+    b. Add a delete button for each review.
+    c.Create a delete review route: DELETE /listing/:id/reviews/:reviewId
+
+7. Handling delete listing:
+    a. delete the listing.
+    b. Need to delete all the reviews related that listing.
+        We will be using post middleware to do this.
+
+:::::::::::::::::::::::::::::::::::::::: Major Project Phase 2 Part B - Implementing Express Router ::::::::::::::::::::::::::::::::::::::::
+1. Restructuring Listing:
+    a. Moving listings related routes from "app.js" to "routes/listing.js".
+
+2. Restructuring Review:
+    a. Moving reviews related routes from "app.js" to "routes/review.js".
+
+
+:::::::::::::::::::::::::::::::::::::::: Major Project Phase 2 Part C - Implementing Session and Flash ::::::::::::::::::::::::::::::::::::::::
+1. Implementing Express Session:
+    a. Install express-session
+    b. Add Session options.
+    c. Add cookies option to Session
+        //Setting session options and cookies.
+        const sessionOptions = {
+        secret: "mysupersecretcode",
+        resave: false,
+        saveUninitialized: true,
+        cookies: {
+            expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+            maxAge: Date.now() + 7 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+        },
+        };
+    d. Use the session
+        const session = require("express-session");
+        app.use(session(sessionOptions));
+
+2. Implementing Flash
+    a. Install connect-flash.
+    b. Import flash- const flash = require("connect-flash"); 
+    c. Add - app.use(flash()); before making any request.
+    d. Add middleware for handling flash message.
+        app.use((req, res, next) => {
+        res.locals.successMsg = req.flash("success");
+        next();
+        });
+    e. Add your flash message in your listing creation request.
+        req.flash("success", "New Lisiting create!");
+    f. Access your flash message where you want to display.Here it is index.ejs.
+        <%= successMsg %>
+
+3. Adding success and error partials: Implementing flash message using includes.
+    a. create includes:flash.ejs
+
+:::::::::::::::::::::::::::::::::::::::: Major Project Phase 2 Part D - Authentication and Authorization ::::::::::::::::::::::::::::::::::::::::
+Concepts:-------------------------------------------------------------------------------------
+Authentication:
+    It is the process of verify who is the someone.
+
+Authorization:
+    It is the process of verifying what accesses someone has.
+
+Storing Password:
+    We never store password as it is form.
+    We store password in hashed form.
+    Hashing functions are used convert password into hashed form.
+
+Hashing:
+    It has fixed length for every input.
+    Every different input there is different output but same length.
+    Slight change in input will result into large chnage in output.
+
+Salting:
+    It is technique to generate hashed form  of the password by adding salt [string of 32 or more character] to it before actually storing  it into database.
+
+Passport:
+    Passport is authentication middleware for Node.js.
+    Extremely flexible and modular.
+    A comprehensive set of strategies support authentication using a username and password, Facebook, Twitter, and more.
+
+    a. passport: Passport is Express-compatible authentication middleware for Node.js.
+    Syntax: npm i passport
+
+    b. passport-locals - Passport strategy for authenticating with a username and password.
+    Syntax: npm i passport-local
+
+    c. passport-local-mongoose: Passport-Local Mongoose is a Mongoose plugin that simplifies building username and password login with Passport.
+    Syntax: npm i passport-local-mongoose
+
+-----------------------------------------------------------------------------
+1. New model: User.
+    a. Create a new User Schema and Model.
+    b. This have fields like email, username and password
+    c. username and password will be taking care by passport-local-mongoose.
+
+2. Configuring strategy:
+    a. To use Passport in an Express or Connect-based application, configure it with the required passport.initialize() middleware.
+    b. If our application uses persistent login sessions, passport.session() middleware must also be used.
+    c. Requires the model with Passport-Local Mongoose plugged in.
+    d. Use static authenticate method of model in LocalStrategy.
+    e. Use static serialize and deserialize of model for passport session support.
+
+3. Sign up User:
+    a. Add a route user.js to "routes" folder.
+    b. Add a view "users" inside views folder then add file signup.ejs to "users" folder.
+    c. Fetch a Signup form using GET /signup route
+    d. create - POST /signup route
+    e.Insert the user to db.
+
+4. Login User:
+    a. Add file login.ejs to "users" folder.
+    b. Fetch a login form using GET /login route
+    c. create POST /login route
+    d. Verify the login user
+
+:::::::::::::::::::::::::::::::::::::::: Major Project Phase 2 Part E - Implementing Authentication and Authorization ::::::::::::::::::::::::::::::::::::::::
+1. Connecting Login Route:
+    a.User should logged in when adding new, deleting, and editing listing.
+    b.We will add "isLoggedIn" middleware to authenticate this.
+
+2. Logout User:
+    a. Create route GET /logout.
+
+3. Display Signup,Login and logout option in nav bar.
+    a. We will check state wether user is logged in or not.
+    b. if user logged in then display Logout otherwise Signup and Login option on nav bar.
+
+4. Login after Signup:
+    a. We will use req.login() method from passport.
+
+5. Post login page:
+    a.If we are accessing anything on application without login then it should ask for login afterward it should redirect to desired section of the application.
+
+6. Listing Owner:
+    a. Now we need to associate the owner with listing.
+    b. We need to update the listing schema and need to add owner field to it.
+        owner:{
+            type:Schema.Types.ObjectId,
+            ref:"User"
+        }
+    c. Now we need to re-initialize data in the DB with Owner info.
+    d. In Show Route:- we will add owner also.
+    e. In show listing:show.ejs - we will display owner. and will update listing card styling.
+    f. We need to add owner whenever new listing[inside - Create Route] is created from the app.
+        newListing.owner=req.user._id;
+
+7. Setting Authorization for listing:
+    a. One who created the listing,will only be able to edit or delete particular listing.
+    b. In show.ejs - we can compare the current user id and owner id stored in the DB then we will display edit or Delete buttons on UI if both matches otherise not.
+    c. We need to protect our Edit, update and delete routes from unauthorized owner.
+    d. We will add new middleware called isOwner.
+    e. We will pass middleware:isOwner to Edit, Update and Delete Route.
+    e. Consolidated all the middleware into single file called "middleware.js".
+
+8. Review Authors:
+    a. Now we need to associate the author with review.
+    b. We need to update the review schema and need to add author field to it.
+        author:{
+            type:Schema.Types.ObjectId,
+            ref:"User"
+        }
+    c. Now we need to re-initialize data in the DB with author info.
+    d. In Show Route:- we will add author also.
+    e. In show listing:show.ejs - we will display review section if only if user is registered.
+    f. We need to add auther whenever new review[inside - Create Route] is created from the app.
+        newReview.authro=req.user._id;
+
+9. Setting Authorization for review:
+    b. In show.ejs - We need to show Add new Review section only if user is logged in.
+    b. One who created the review,will only be able to delete particular review.
+    c. We need to protect our delete routes from unauthorized author.
+    d. We will add new middleware called isReviewAuthor.
+    e. We will pass middleware:isReviewAuthor to Delete Route.

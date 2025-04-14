@@ -1,0 +1,100 @@
+Events in React:
+    1. Handling click event.
+        Example:
+            function doSomething() {
+            console.log("You clicked me");
+            }
+
+            export default function Button() {
+            return(
+                <button onClick={doSomething}>Click Me</button>
+            );
+            }
+    2. Handling non click events:mouseOver,mouseOut,keypress,keyrelease
+        Example:
+            function handleMouseover() {
+            console.log("You mouseover!");
+            }
+
+            function handleMouseOut(){
+            console.log("You mouseout!");
+            }
+
+            export default function Button() {
+            return (
+                <>
+                <button onClick={doSomething}>Click Me</button>
+                <p onMouseOver={handleMouseover}>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae
+                    consequatur quam ex necessitatibus culpa voluptates doloremque facere
+                    dolorum laborum nobis adipisci deserunt quasi, temporibus animi debitis
+                    vero ab sint obcaecati.
+                </p>
+                <p onMouseOut={handleMouseOut}>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae
+                    consequatur quam ex necessitatibus culpa voluptates doloremque facere
+                    dolorum laborum nobis adipisci deserunt quasi, temporibus animi debitis
+                    vero ab sint obcaecati.
+                </p>
+                </>
+            );
+            }
+
+    3.Event object:
+        Example:
+            function handleForm(event) {
+            event.preventDefault();
+            console.log("Form submitted successfully!");
+            }
+
+            export default function Form() {
+            return (
+                <form action="" onSubmit={handleForm}>
+                <input type="text" placeholder="Enter something" />
+                <button>Submit</button>
+                </form>
+            );
+            }
+
+    4. State and Hooks in React:
+        a. State: The state is a built in React Object that is used to contain data or information about the component.
+                  A component's state can change over time; whenever it chnages, the component re-renders.
+        
+        b. Hooks: Hooks allow function components to have access to state and other React features. 
+                  Because of this, class components are generally no longer needed.
+                
+                Syntax:State & Hooks
+
+                    import { useState } from 'react';
+                    const[stateVaribale,setStatevaribale]=useState(0);
+                    
+                Example:State & Hooks
+                    import { useState } from 'react';
+                    export default function Button() {
+                        const [count, setCount] = useState(0);
+                        function handleCounter() {
+                            setCount(count + 1);
+                        }
+                        return (
+                            <>
+                                <button onClick={handleCounter}>Clicked {count} times</button>
+                            </>
+                                );
+                        }
+    
+    5. Closure:A closure is featurein Javascript where inner function has the access to outer function's variables.
+        Example:
+            function outer(){
+                let a=10;
+                function inner(){
+                    console.log(a+b);
+                }
+                return inner;
+            }
+
+            let inner=outer();
+            inner();
+
+Note:Re-rendering in react will take place only if there is a change in the state of the component.
+
+    

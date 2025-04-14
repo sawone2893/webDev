@@ -1,0 +1,138 @@
+Middleware: It is intermediary.
+            Middleware is a request handler that allows you to intercept and manipulate requests and responses before they reach route handlers.
+            They are the functions that are invoked by the Express. js routing layer
+            In simpler words,these works after receiving the request and before sending response.
+            Common Middleware that we have already used are as follows:
+            a. methodOverwrite:This is used to serve PUT,PATCH,DELETE request.
+                    Example: app.use(methodOverride("_method"));
+
+            b. bodyparser: Body parser is a middleware for Node. js that parses incoming request bodies and makes them available as objects in the req. body property. 
+                           This is crucial for handling data submitted through HTML forms, JSON data, and other formats
+                    Example: const bodyParser = require('body-parser');
+                             app.use(bodyParser.json({ type: 'application/*+json' }));// parse various different custom JSON types as JSON
+                             app.use(bodyParser.raw({ type: 'application/vnd.custom-type' }));// parse some custom thing into a Buffer
+                             app.use(bodyParser.text({ type: 'text/html' }));// parse an HTML body into a string
+
+            c. express.static:This is used to service static files like CSS and JS.
+                    Example: app.use(express.static(path.join(__dirname,"/public")));
+                    
+            d. express.urlencoded:it is used to handle form submissions sent in application/x-www-form-urlencoded format. It encodes form data as key-value pairs, converting special characters like spaces into %20 or +.
+                                 It parses the form data and converts it into a JavaScript object, which can be accessed through request.
+                    Example: app.use(express.urlencoded({extended:true}));
+
+request------->middleware---------->response
+--------------------------------------------------------------------
+Notes:
+Middleware functions can perform the following tasks:
+        a. Execute any code.
+        b. Make changes to the request and the response objects.
+        c. End the request-response cycle.
+        d. Call the next middleware function in the stack.
+=====================================================================
+Creating custom middleware:
+        Example:
+                app.use((req, res, next) => {
+                console.log("Middleware1");
+                next();
+                });
+--------------------------------------------------------
+API Token as Query String:
+        Example:
+                app.use("/api", (req, res, next) => {
+                let { token } = req.query;
+                if (token === "giveaccess") {
+                next();
+                }
+                res.send("ACCESS DENIED!");
+                });
+
+Error handling:
+        Example:
+                let checkToken = (req, res, next) => {
+                let { token } = req.query;
+                if (token === "giveaccess") {
+                next();
+                }
+                throw new Error("ACCESS DENIED!");
+                };
+
+                app.get("/random", checkToken, (req, res) => {
+                res.send("data");
+                });
+==============================================================================================
+Error Handling Middlewares:
+        Error-handling middleware always takes four arguments.
+        You must provide four arguments to identify it as an error-handling middleware function. 
+        Even if you don’t need to use the next object, you must specify it to maintain the signature.
+        Otherwise, the next object will be interpreted as regular middleware and will fail to handle errors.
+
+        Define error-handling middleware functions in the same way as other middleware functions, 
+        except with four arguments instead of three, specifically with the signature (err, req, res, next):
+        
+        Example:
+                app.use((err, req, res, next) => {
+                console.error(err.stack)
+                res.status(500).send('Something broke!')
+                })
+
+=================================================================
+Custom Error handling:
+
+        Example:
+                Example:
+                let checkToken = (req, res, next) => {
+                let { token } = req.query;
+                if (token === "giveaccess") {
+                next();
+                }
+                throw new ExpressError(401,"ACCESS DENIED!");here we are using our error handling class:ExpressError
+                };
+
+                app.get("/random", checkToken, (req, res) => {
+                res.send("data");
+                });
+=================================================================================
+Error Class:
+        Example-
+
+        class ExpressError extends Error {
+        constructor(status, message) {
+        super();
+        this.status = status;
+        this.message = message;
+        }
+        }
+
+module.exports = ExpressError;
+=================================================================================
+Async Error handling:
+        1. id does not exist.
+        2. Validation error:we can handle is type of error using try catch
+=================================================================================
+Using wrapAsync function: It is function which take function as agruement and return a function.
+        Example:
+        function asyncWrap(fn){
+                return function (req,res,next){
+                        fn(req,res,next).catch(err)=>next(err);
+                };
+        }
+
+        app.get("/random", checkToken, asyncWrap((req, res) => {
+                res.send("data");
+                }));
+==============================================================================
+Mongoose Errors:
+        Example:
+                const handleValidationErr=(err)=>{
+                        console.log("This was a Validation error. Please follow rules");
+                        console.log(err.message)
+                        return err;
+                }
+
+                app.use((err, req, res, next) => {
+                        console.log(err.name);
+                        if(err.name==="ValidationError"){
+                                err=handleValidationErr(err);
+                        }
+                        next(err);
+                });

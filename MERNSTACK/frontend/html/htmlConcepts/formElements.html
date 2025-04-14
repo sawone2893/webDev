@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Elements</title>
+  </head>
+  <body>
+    <form action="/action">
+      <div>
+        <label for="fname">FirstName:</label
+        ><input
+          type="text"
+          name="fname"
+          id="fname"
+          placeholder="Enter your First Name"
+        />
+      </div>
+      <div>
+        <label for="lname">LastName:</label
+        ><input
+          type="text"
+          name="lname"
+          id="lname"
+          placeholder="Enter your Last Name"
+        />
+      </div>
+      <div>
+        Gender:
+        <input type="radio" name="gender" id="m" value="male" />
+        <label for="m">Male</label>
+        <input type="radio" name="gender" id="f" value="female" />
+        <label for="f">Female</label>
+      </div>
+      <div>
+        <label for="email">Email:</label
+        ><input
+          type="email"
+          name="email"
+          id="email"
+          placeholder="Enter your Email Address"
+        />
+      </div>
+      <div>
+        <label for="username">Username:</label
+        ><input
+          type="text"
+          name="username"
+          id="username"
+          placeholder="Enter your Username"
+        />
+      </div>
+      <div>
+        <label for="password">Password:</label
+        ><input
+          type="password"
+          name="password"
+          id="password"
+          placeholder="Enter your Password"
+        />
+      </div>
+      <div>
+        <label for="dob">DOB:</label><input type="date" name="dob" id="dob" />
+      </div>
+      <div>
+        <label for="btime">Birth Time:</label
+        ><input type="time" name="btime" id="btime" />
+      </div>
+      <div>
+        <label for="age">Age:</label
+        ><input
+          type="number"
+          name="age"
+          id="age"
+          placeholder="Enter your Age"
+        />
+      </div>
+      <div>
+        Hobbies:
+        <input type="checkbox" name="code" id="code" />
+        <label for="code">Coding</label>
+        <input type="checkbox" name="dance" id="dance" />
+        <label for="dance">Dancing</label>
+        <input type="checkbox" name="race" id="race" />
+        <label for="race">Racing</label>
+        <input type="checkbox" name="draw" id="draw" />
+        <label for="draw">Drawing</label>
+      </div>
+      <div>
+        <label for="profession">Choose your Profession: </label>
+        <select name="profession" id="profession">
+          <option>Choose your option</option>
+          <option value="engineer">Engineer</option>
+          <option value="doctor">Doctor</option>
+          <option value="builder">Builder</option>
+          <option value="politician">Politician</option>
+          <option value="soldier">Soldier</option>
+          <option value="student">Student</option>
+        </select>
+      </div>
+      <div>
+        <label for="percent">Percentage: </label>
+        <input type="range" name="percent" id="percent" min="0" max="100" />
+      </div>
+      <div>
+        <label for=""> Comments: </label>
+        <textarea name="comments" id="comments"></textarea>
+      </div>
+
+      <button type="submit">Submit</button>
+      <button type="reset">Reset</button>
+      <button type="button">Help</button>
+    </form>
+  </body>
+</html>
