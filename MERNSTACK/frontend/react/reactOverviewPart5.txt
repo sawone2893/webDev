@@ -1,0 +1,64 @@
+----------------------------------------------CONCEPTS START--------------------------------
+#. State Design Pattern:In the State Pattern, we create objects which represent various states and a context object whose behavior varies as its state object changes.
+The state object changes are usually triggered by calling methods defined by the pattern’s super-class.
+
+#. State Lifting up:Lifting state up in React is a pattern where you move the state from a child component to its parent component, making it accessible to multiple child components that need it.
+                    This centralized state management approach ensures a single source of truth and simplifies interactions between components. 
+                    Here's a breakdown of the process:
+                        a. Identify shared state: Determine which state is needed by multiple components. 
+                        b. Move state to parent: Remove the state from the child components and move it to their closest common ancestor. 
+                        c. Pass state as props: Pass the state down from the parent to the child components as props. 
+                        d. Implement callbacks: Create callback functions in the parent to handle changes in the state. 
+                        e. Pass callbacks as props: Pass these callback functions down to the child components as props. 
+                        f. Update state: When the child components need to update the state, they should call the callback function passed from the parent.
+
+#. Component Types: Component are of two types.
+        a. Logical component: Smart, State
+        b. Presentional component: UI, no state.
+
+#. Function as Prop: JS function are 1st class objects.
+                    This means they can be passed to function as arguement,return from it and assigned to variable.
+                    
+----------------------------------------------CONCEPTS END--------------------------------
+
+Activity: Create Lottery Game: Refer lottery app inside activities for code details.
+    1. Create a new react app inside activities usding below command.
+        npm create vite@latest
+        npm i
+        npm run dev
+    
+    2. Create following component
+        a. Lottery.jsx
+            Props: n,winCondition
+            State:ticket[]
+            Events: buyTciket()
+
+            Example: 
+
+                let winCondtion=(ticket)=>{
+                    return sum(ticket) === 15;
+                }
+                const [ticket, setTicket] = useState(genRanNumSet(n));
+                let isWinning = winCondition;
+                const buyTicket = () => {
+                    setTicket(genRanNumSet(n));
+                };
+
+        b. Ticket.jsx
+            Props: Ticket of size n
+            State: none
+            Events: none
+
+        c. TicketNum.jsx
+            Props: num
+            State: none
+            Events: none
+
+    3. Create css file for each component as follows
+        a. Lottery.css
+        b. Ticket.css
+        c. TicketNum.css
+        
+    4. Create helper .js file which will have following Function.
+        a. genRanNumSet
+        b. sum
