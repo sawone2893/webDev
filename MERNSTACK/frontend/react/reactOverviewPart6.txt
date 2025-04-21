@@ -1,0 +1,126 @@
+1. Forms in React:Controlled component
+        a. In react form elements do not have their own state.
+        b. In React, form data is usually handled by the components.
+        c. When the data is handled by the components, all the data is stored in the component state.
+        d. You can control changes by adding event handlers in the onChange attribute.
+        e. We can use the useState Hook to keep track of each inputs value and provide a "single source of truth" for the entire application.
+
+    Example:
+        export default function ReactForms() {
+        let [fullName, setFullName] = useState("");
+        let textUpdate = (event) => {
+            setFullName(event.target.value);
+        };
+        return (
+            <form action="">
+            <input
+                type="text"
+                placeholder="Enter some text"
+                onChange={textUpdate}
+                value={fullName}
+            />
+            </form>
+        );
+        }
+
+2. Labels in React:
+    Example:
+        export default function ReactForms() {
+        let [fullName, setFullName] = useState("");
+        let textUpdate = (event) => {
+            setFullName(event.target.value);
+        };
+        return (
+            <form>
+            <label htmlFor="fullName">Full Name: </label>
+            <input
+                type="text"
+                placeholder="Enter some text"
+                onChange={textUpdate}
+                value={fullName}
+                id="fullName"
+            />
+            </form>
+        );
+        }
+
+3. Handling multiple inputs:
+    Example:
+        export function HandleMultipleInputs() {
+        let [formData, setFormData] = useState({
+            fullName: "",
+            username: "",
+            password: "",
+        });
+        let handleInputChange = (event) => {
+            setFormData((currData) => {
+            return { ...currData, [event.target.name]: event.target.value };
+            });
+        };
+        let handleSubmit = (event) => {
+            event.preventDefault();
+            setFormData({
+            fullName: "",
+            username: "",
+            password: "",
+            });
+        };
+        return (
+            <form onSubmit={handleSubmit}>
+            <label htmlFor="fullName">Full Name: </label>
+            <input
+                type="text"
+                placeholder="Enter full name"
+                onChange={handleInputChange}
+                value={formData.fullName}
+                id="fullName"
+                name="fullName"
+            />
+            <label htmlFor="username">Username: </label>
+            <input
+                type="text"
+                placeholder="Enter username"
+                onChange={handleInputChange}
+                value={formData.username}
+                id="username"
+                name="username"
+            />
+            <label htmlFor="password">Password: </label>
+            <input
+                type="password"
+                placeholder="Enter some text"
+                onChange={handleInputChange}
+                value={formData.password}
+                id="password"
+                name="password"
+            />
+            <button>Submit</button>
+            </form>
+        );
+        }
+
+4. useEffect:Refer Activity: Counter inside the activities folder for implementation.
+        a. The useEffect Hook allows us to perform side effects in our components.
+        b. Some examples of side effects are: fetching data, directly updating the DOM, and timers.
+        c. useEffect accepts two arguments. The second argument is optional.
+                useEffect(<function>, <dependency>)
+        d. useEffect runs on every render.
+        e. There are several ways to control when side effects run.
+                i. No dependency passed:
+                    Example:
+                        useEffect(() => {
+                        //Runs on every render
+                        });
+                
+                ii. An empty array:
+                     Example:
+                        useEffect(() => {
+                        //Runs only on the first render
+                        }, []);
+                
+                iii. Props or state values:
+                        Example:
+                            useEffect(() => {
+                            //Runs on the first render
+                            //And any time any dependency value changes
+                            }, [prop, state]);
