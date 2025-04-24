@@ -1,0 +1,14 @@
+Material UI:
+    a. Material UI is an open-source React component library that implements Google's Material Design. 
+            npm install @mui/material @emotion/react @emotion/styled
+    b. Material UI uses Emotion as its default styling engine.
+    c. Material UI uses the Roboto font by default.
+            npm install @fontsource/roboto 
+    d. We must first install the Material Icons font to use the font Icon component or the prebuilt SVG Material Icons.
+            npm install @mui/icons-material
+
+Mini-Project: Weather App - Refer mini-project inside activities folder for more detail of the code.
+1. There are three component
+        a. SearchBox.jsx
+        b. InfoBox.jsx
+        c. WeatherApp.jsx
