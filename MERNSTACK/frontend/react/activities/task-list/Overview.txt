@@ -1,0 +1,40 @@
+Styling React Application:
+    1. Global Level Styling:
+        Example:
+            index.css
+    
+    2. Component Level Styling:ComponentName.css
+        Example:
+            App.css
+            TaskList.css
+            TasKCard.css
+    
+    3. Inline Level Styling:We need to follow camel case for css property name.
+        Example:
+            const h1Style={
+                color:"red",
+                border:"1px solid,black",
+                borderRadius:"5px",
+                padding:"20px"
+            }
+
+            <h1 style={h1Style}>Task List</h1>
+    
+    4. Dynamic Level Styling:
+        Example:
+            let completeStyle = {
+                borderBottom: "5px solid green",
+            };
+            let inCompleteStyle = {
+                borderBottom: "5px solid red",
+            };
+            <div className="TaskCard" style={tsk.completed?completeStyle:inCompleteStyle}></div>
+
+----------------------------------------------------------------------------------------------------
+Json Server:
+The JSON Server helps frontend developers simulate all types of HTTP requests (GET, POST, PATCH, DELETE) to the mock server.
+This aids in developing interactive applications that need to fetch data, create new data, update existing data, or delete data from the server
+
+Command to install this: npm i json-server
+Command to start server: npx json-server --watch data/db.json --port 8000
+Endpoint: http://localhost:8000/products
