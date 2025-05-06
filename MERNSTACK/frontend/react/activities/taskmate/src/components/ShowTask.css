@@ -1,0 +1,56 @@
+.showTask {
+  padding: 20px 15px;
+  border-radius: 5px;
+  background-color: #FFFFFF;
+  margin: 20px auto;
+  box-shadow: var(--box-shadow);
+}
+
+.showTask div.head {
+  padding: 10px 0px 20px 0px;
+  border-bottom: 1px solid #dfdfdf;
+  display: flex;
+  align-items: center;
+}
+
+.showTask div.head div {
+  flex-grow: 1;
+}
+
+.showTask .title {
+  font-size: 18px;
+  font-weight: 600;
+  user-select: none;
+}
+
+.showTask .count {
+  background-color: #dfdfdf;
+  color: #525252;
+  padding: 5px 10px;
+  border-radius: 50%;
+  margin-left: 10px;
+  user-select: none;
+}
+
+.showTask .clearAll {
+  background-color: #0f6af3;
+  color: #FFFFFF;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 0px;
+  font-size: 16px;
+}
+
+.showTask .clearAll:hover {
+  background-color: #1061db;
+}
+
+.showTask ul {
+  margin: 30px 5px 20px 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 15px;
+}
