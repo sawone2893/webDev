@@ -1,0 +1,12 @@
+Project detail: Create a react with vite project using below command.
+                npm create vite@latest cinmate;
+
+Folder Structure:
+  1. src/assets
+  2. src/components
+  3. src/pages
+  4. src/routes
+
+Dependencies:
+  1. react-router-dom@6
+  2. tailwindcss @tailwindcss/vite
